@@ -49,41 +49,41 @@ export default {
     [Grid.name]: Grid,
     [GridItem.name]: GridItem,
     [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem
+    [SwipeItem.name]: SwipeItem,
   },
   data() {
     return {
       images: [
         "https://img.yzcdn.cn/vant/apple-1.jpg",
-        "https://img.yzcdn.cn/vant/apple-1.jpg"
+        "https://img.yzcdn.cn/vant/apple-1.jpg",
       ],
       gridList: [
         {
           name: "邮寄限制",
           icon: "free-postage",
-          to: "/postLimit"
+          to: "/postLimit",
         },
         {
           name: "运费试算",
           icon: "cashier-o",
-          to: "/freightEstimation"
+          to: "/freightEstimation",
         },
         {
           name: "仓库地址",
           icon: "shop-o",
-          to: "/warehouse"
+          to: "/warehouse",
         },
         {
           name: "地址管理",
           icon: "location-o",
-          to: "/addressManage"
+          to: "/addressManage",
         },
         {
           name: "订单管理",
           icon: "logistics",
-          to: "/overseasOrder"
-        }
-      ]
+          to: "/overseasOrder",
+        },
+      ],
     };
   },
   created() {
@@ -92,8 +92,8 @@ export default {
   methods: {
     handleBanner(url) {
       console.log(url);
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less">
