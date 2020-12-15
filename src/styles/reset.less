@@ -1,0 +1,176 @@
+body,
+div,
+span,
+header,
+footer,
+nav,
+section,
+aside,
+article,
+ul,
+dl,
+dt,
+dd,
+li,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b,
+textarea,
+button,
+input,
+select,
+figure,
+figcaption {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-style: normal;
+  text-decoration: none;
+  box-sizing: border-box;
+  border: none;
+  font-family: Microsoft Yahei, Arial, 'Hiragino Sans GB', Helvetica Neue, Helvetica, sans-serif !important;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased; 
+  &:focus {
+    outline: none;
+  }
+}
+
+html,
+body {
+  background-color: #f2f2f2;  
+  height: 100%;
+}
+
+a {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-style: normal;
+  text-decoration: none;
+  box-sizing: border-box;
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+//  手机端禁止粘贴复制
+/** {
+    -webkit-touch-callout: none;
+    !*系统默认菜单被禁用*!
+    -webkit-user-select: none;
+    !*webkit浏览器*!
+    -khtml-user-select: none;
+    !*早期浏览器*!
+    -moz-user-select: none;
+    !*火狐*!
+    -ms-user-select: none;
+    !*IE10*!
+    user-select: none;
+    box-sizing: border-box;
+}*/
+
+//  修复-webkit-user-select:none导致input框无法正常输入内容
+input,
+textarea {
+  //-webkit-user-select: auto;
+  /*webkit浏览器*/
+}
+
+// 清除输入框内阴影
+input[type="button"],
+input[type="submit"],
+input[type="search"],
+input[type="reset"],
+input[type="text"] {
+  -webkit-appearance: none;
+}
+
+textarea {
+  -webkit-appearance: none;
+}
+
+input::placeholder {
+  // font-size:26px;
+  // line-height: inherit;
+  // color: #CCCCCC;
+  color: #A9A9A9;
+}
+
+textarea::placeholder {
+  //   font-size:26px;
+  //   line-height: inherit;
+  // color: #CCCCCC;
+  color: #A9A9A9;
+}
+
+
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: " ";
+}
+
+.clearfix:after {
+  clear: both;
+}
+
+/*******************公共的页面字体样式******************/
+.fz18 {
+  font-size: 18px;
+}
+
+.fz20 {
+  font-size: 20px;
+}
+
+.fz22 {
+  font-size: 22px;
+}
+
+.fz24 {
+  font-size: 24px;
+}
+
+.fz26 {
+  font-size: 26px;
+}
+
+.fz28 {
+  font-size: 28px;
+}
+
+.fz30 {
+  font-size: 30px;
+}
+
+.fz32 {
+  font-size: 32px;
+}
+
+.fz34 {
+  font-size: 34px;
+}
+
+.fz36 {
+  font-size: 36px;
+}
+
+.fz40 {
+  font-size: 40px;
+}
+
+.dt-1px-b {
+  border-bottom: 1PX solid #f5f5f5;
+}
+
+.dt-1px-t {
+  border-top: 1PX solid #f5f5f5;
+}
