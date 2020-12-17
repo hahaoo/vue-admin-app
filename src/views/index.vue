@@ -4,7 +4,7 @@
       <div class="carousel">
         <van-swipe :autoplay="3000">
           <van-swipe-item v-for="(image, index) in images" :key="index">
-            <img v-lazy="image" width="100%" />
+            <!-- <img v-lazy="image" width="100%" /> -->
           </van-swipe-item>
         </van-swipe>
       </div>
@@ -21,13 +21,34 @@
       </div>
 
       <div class="section-two">
-        <van-grid>
-          <van-grid-item icon="photo-o" text="文字333" />
-          <van-grid-item icon="photo-o" text="文字444" />
+        <van-grid :column-num="2" :gutter="10">
+          <van-grid-item>
+            <van-button type="info">开始转运</van-button>
+          </van-grid-item>
+          <van-grid-item>
+            <van-button type="primary">马上拼邮</van-button>
+          </van-grid-item>
         </van-grid>
       </div>
-    </div>
 
+      <div class="section-three">
+        <div class="s-header">
+          <van-divider
+            :style="{
+              color: '#1989fa',
+              borderColor: '#1989fa',
+              padding: '0 16px',
+              fontSize: '16px',
+            }"
+          >
+            正在拼邮
+          </van-divider>
+        </div>
+        <div class="s-list">
+          <PinyouList></PinyouList>
+        </div>
+      </div>
+    </div>
     <div class="footer">
       <footer-com></footer-com>
     </div>
@@ -35,21 +56,31 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import { NavBar, Icon, Col, Row, Grid, GridItem, Swipe, SwipeItem } from "vant";
+import {
+  NavBar,
+  Icon,
+  Grid,
+  GridItem,
+  Swipe,
+  SwipeItem,
+  Button,
+  Divider,
+} from "vant";
 import FooterCom from "@/components/FooterCom";
+import PinyouList from "./components/pinyou/List";
 export default {
   name: "index",
   components: {
     FooterCom,
+    PinyouList,
     [NavBar.name]: NavBar,
     [Icon.name]: Icon,
-    [Col.name]: Col,
-    [Row.name]: Row,
     [Grid.name]: Grid,
     [GridItem.name]: GridItem,
     [Swipe.name]: Swipe,
     [SwipeItem.name]: SwipeItem,
+    [Button.name]: Button,
+    [Divider.name]: Divider,
   },
   data() {
     return {
@@ -114,15 +145,20 @@ export default {
     }
   }
   .content {
+    [class*="van-hairline"]::after {
+      border: none;
+    }
     .carousel {
       margin-bottom: 10px;
     }
     .section-one {
-      background-color: #fff;
       margin-bottom: 14px;
       .grid {
         font-size: 16px;
         color: #1087eb;
+        .van-grid-item__content {
+          background-color: transparent;
+        }
         .van-icon {
           font-size: 30px;
         }
@@ -130,6 +166,19 @@ export default {
           font-size: 13px;
           color: #333;
         }
+      }
+    }
+    .section-two {
+      .van-grid-item__content--center {
+        padding: 0px;
+        .van-button {
+          width: 100%;
+        }
+      }
+    }
+    .section-three {
+      .s-header {
+        margin-bottom: 10px;
       }
     }
   }

@@ -6,9 +6,7 @@
       active-color="#1087eb"
       inactive-color="#000"
     >
-      <van-tabbar-item to="/index" icon="wap-home-o">
-        首页
-      </van-tabbar-item>
+      <van-tabbar-item to="/index" icon="wap-home-o"> 首页 </van-tabbar-item>
       <van-tabbar-item to="/overseasOrder" icon="cart-o">
         订单管理
       </van-tabbar-item>
@@ -21,19 +19,19 @@
 
 <script>
 // @ is an alias to /src
-import { Tabbar, TabbarItem } from 'vant'
+import { Tabbar, TabbarItem } from "vant";
 export default {
-  name: 'FooterCom',
+  name: "FooterCom",
   components: {
     [Tabbar.name]: Tabbar,
-    [TabbarItem.name]: TabbarItem
+    [TabbarItem.name]: TabbarItem,
   },
   data() {
     return {
       active: 0,
-    }
-  }
-}
+    };
+  },
+};
 </script>
 <style lang="less">
 .footer-content {
