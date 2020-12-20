@@ -84,19 +84,18 @@
           <span>设为默认地址</span>
           <van-switch v-model="isDefault" />
         </div>
-        <div style="margin: 26px;">
+        <div style="margin: 26px">
           <van-button
             round
             block
             type="info"
             native-type="submit"
-            style="margin-bottom: 16px;"
+            style="margin-bottom: 16px"
+            >保存</van-button
           >
-            保存
-          </van-button>
         </div>
       </van-form>
-      <div style="margin: 0px 26px;">
+      <div style="margin: 0px 26px">
         <van-button
           v-if="form.id"
           round
@@ -104,9 +103,8 @@
           type="danger"
           plain
           @click="onDelete"
+          >删除</van-button
         >
-          删除
-        </van-button>
       </div>
     </div>
 
@@ -172,7 +170,7 @@ export default {
   created() {
     this.actionType = this.$route.query.actionType;
     let row = this.$route.query.item;
-    this.initData();
+    // this.initData();
     if (this.actionType == "edit") {
       this.headTitle = "地址编辑";
       this.form = JSON.parse(row);

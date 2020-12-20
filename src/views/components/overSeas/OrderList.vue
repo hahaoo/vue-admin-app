@@ -13,8 +13,8 @@
               <van-cell>
                 <template #title>
                   <span class="custom-title"
-                    >({{ index + 1 }}) 订单号：{{ item.transCode }}
-                  </span>
+                    >({{ index + 1 }}) 订单号：{{ item.transCode }}</span
+                  >
                 </template>
                 <template #right-icon>
                   <van-tag type="primary" plain size="medium">{{
@@ -26,7 +26,7 @@
             <van-card
               :title="item.logistics"
               :num="item.num"
-              currency=""
+              currency
               :centered="true"
               :desc="item.declareRemark"
               :thumb="item.imgUrl ? item.imgUrl : '3.png'"
@@ -34,8 +34,8 @@
             >
               <template #footer>
                 <div class="summary-box">
-                  <span>共：{{ item.shippingFee }} 元</span>
-                  <span>共：{{ item.cnt }} 个包裹</span>
+                  <span>共：100 元</span>
+                  <span>共：2 个包裹</span>
                 </div>
                 <van-button
                   round
@@ -47,7 +47,7 @@
                 >
                 <!-- <van-button round size="small" type="info" plain
                   >查看物流</van-button
-                > -->
+                >-->
                 <van-button round size="small" type="primary">签收</van-button>
               </template>
             </van-card>
@@ -60,7 +60,7 @@
 
 <script>
 // @ is an alias to /src
-import { findTransportByDistributorApi } from "@/api/index";
+// import { findTransportByDistributorApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -70,7 +70,7 @@ import {
   Card,
   Tag,
   Button,
-  ImagePreview
+  ImagePreview,
 } from "vant";
 export default {
   name: "home",
@@ -83,7 +83,7 @@ export default {
     [Card.name]: Card,
     [Tag.name]: Tag,
     [Button.name]: Button,
-    [ImagePreview.Component.name]: ImagePreview.Component
+    [ImagePreview.Component.name]: ImagePreview.Component,
   },
   props: ["status"],
   data() {
@@ -95,9 +95,9 @@ export default {
       searchParam: {
         status: 1,
         page: 1,
-        rowsPerPage: 10
+        rowsPerPage: 10,
       },
-      pageNum: 0 //分页
+      pageNum: 0, //分页
     };
   },
   created() {
@@ -129,25 +129,30 @@ export default {
     //获取数据
     async getList(pageNum) {
       this.searchParam.page = pageNum;
-      let res = await findTransportByDistributorApi(this.searchParam);
-      if (res.ErrorCode == "9999" && res.Data.Results.length > 0) {
-        var data = res.Data.Results;
-        for (var i = 0; i < data.length; i++) {
-          this.list.push(data[i]);
+      setTimeout(() => {
+        if (this.refreshing) {
+          this.list = [];
+          this.refreshing = false;
         }
-        if (this.list.length >= res.Data.Pagination.totalCount) {
-          // this.loading = false;
+
+        for (let i = 0; i < 5; i++) {
+          let item = {
+            status: "1",
+            transCode: "1122",
+            logistics: "测试111111",
+          };
+          this.list.push(item);
+        }
+        this.loading = false;
+
+        if (this.list.length >= 10) {
           this.finished = true;
         }
-      } else {
-        this.finished = true;
-      }
-      this.loading = false;
+      }, 1000);
     },
     onLoad() {
       this.loading = true;
       this.getList(++this.pageNum);
-
     },
     onRefresh() {
       // 清空列表数据
@@ -158,27 +163,26 @@ export default {
       this.refreshing = false;
     },
     onClickThumb(item) {
-
       if (item.imgUrl) {
         this.images = [item.imgUrl];
       } else {
-        this.images = ['3.png'];
+        this.images = ["3.png"];
       }
       ImagePreview({
         images: this.images,
         closeable: true,
         loop: false, //是否循环播放\
-      })
+      });
     },
     goOrderDetail(item) {
       this.$router.push({
         path: "/orderDetail",
         query: {
-          id: item.id
-        }
+          id: item.id,
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

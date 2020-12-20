@@ -8,9 +8,7 @@
           </van-col>
           <van-col span="16">
             <van-row>
-              <van-col span="24" class="user-name">
-                {{ nickName }}
-              </van-col>
+              <van-col span="24" class="user-name">{{ nickName }}</van-col>
               <van-col span="24" class="user-phone">
                 <!-- 13288998789 -->
               </van-col>
@@ -23,9 +21,9 @@
       </div>
       <div class="account-info">
         <div class="grid-panel">
-          <van-cell title="我的账户" is-link to="" class="title"> </van-cell>
+          <van-cell title="我的账户" is-link to class="title"></van-cell>
           <van-grid clickable :column-num="4" class="grid" :border="false">
-            <van-grid-item to="">
+            <van-grid-item to>
               <template #text>
                 <div class="text">账户余额</div>
               </template>
@@ -33,7 +31,7 @@
                 <div class="price">￥0.00</div>
               </template>
             </van-grid-item>
-            <van-grid-item to="">
+            <van-grid-item to>
               <template #text>
                 <div class="text">可提现金额</div>
               </template>
@@ -41,7 +39,7 @@
                 <div class="price">￥0.00</div>
               </template>
             </van-grid-item>
-            <van-grid-item to="">
+            <van-grid-item to>
               <template #text>
                 <div class="text">优惠券</div>
               </template>
@@ -49,7 +47,7 @@
                 <div class="price">0张</div>
               </template>
             </van-grid-item>
-            <van-grid-item to="">
+            <van-grid-item to>
               <template #text>
                 <div class="text">邀请奖励</div>
               </template>
@@ -61,73 +59,91 @@
         </div>
       </div>
       <div class="order-info">
-        <div class="grid-panel">
-          <van-cell title="国内包裹" class="title" is-link to="/domesticOrder">
-          </van-cell>
+        <!-- <div class="grid-panel">
+          <van-cell title="国内包裹" class="title" is-link to="/domesticOrder"></van-cell>
           <van-grid clickable :column-num="4" class="grid" :border="false">
             <van-grid-item to="/domesticOrder?status=1">
               <template #text>
                 <div class="text">已预报</div>
               </template>
               <template #icon>
-                <div class="icon"><van-icon name="clock-o" /></div>
+                <div class="icon">
+                  <van-icon name="clock-o" />
+                </div>
               </template>
             </van-grid-item>
-            <!-- <van-grid-item to="">
-              <template #text>
-                <div class="text">已签收</div>
-              </template>
-              <template #icon>
-                <div class="icon"><van-icon name="sign" /></div>
-              </template>
-            </van-grid-item> -->
+            
             <van-grid-item to="/domesticOrder?status=2">
               <template #text>
                 <div class="text">已上架</div>
               </template>
               <template #icon>
-                <div class="icon"><van-icon name="certificate" /></div>
+                <div class="icon">
+                  <van-icon name="certificate" />
+                </div>
               </template>
             </van-grid-item>
-            <van-grid-item to=""> </van-grid-item>
-            <van-grid-item to=""> </van-grid-item>
+            <van-grid-item to></van-grid-item>
+            <van-grid-item to></van-grid-item>
           </van-grid>
-        </div>
+        </div>-->
 
         <div class="grid-panel">
-          <van-cell title="海外包裹" class="title" is-link to="/overseasOrder">
-          </van-cell>
-          <van-grid clickable :column-num="4" class="grid" :border="false">
-            <van-grid-item to="/overseasOrder?status=1">
+          <van-cell
+            title="我的订单"
+            class="title"
+            is-link
+            to="/orderManage"
+          ></van-cell>
+          <van-grid clickable :column-num="5" class="grid" :border="false">
+            <van-grid-item to="/orderManage?status=1">
               <template #text>
-                <div class="text">待付款</div>
+                <div class="text">已预报</div>
               </template>
               <template #icon>
-                <div class="icon"><van-icon name="balance-pay" /></div>
+                <div class="icon">
+                  <van-icon name="balance-pay" />
+                </div>
               </template>
             </van-grid-item>
-            <van-grid-item to="/overseasOrder?status=2">
+            <van-grid-item to="/orderManage?status=2">
               <template #text>
-                <div class="text">待出库</div>
+                <div class="text">已上架</div>
               </template>
               <template #icon>
-                <div class="icon"><van-icon name="peer-pay" /></div>
+                <div class="icon">
+                  <van-icon name="peer-pay" />
+                </div>
               </template>
             </van-grid-item>
-            <van-grid-item to="/overseasOrder?status=4">
+            <van-grid-item to="/orderManage?status=3">
+              <template #text>
+                <div class="text">待打包</div>
+              </template>
+              <template #icon>
+                <div class="icon">
+                  <van-icon name="tosend" />
+                </div>
+              </template>
+            </van-grid-item>
+            <van-grid-item to="/orderManage?status=4">
+              <template #text>
+                <div class="text">已出库</div>
+              </template>
+              <template #icon>
+                <div class="icon">
+                  <van-icon name="logistics" />
+                </div>
+              </template>
+            </van-grid-item>
+            <van-grid-item to="/orderManage?status=5">
               <template #text>
                 <div class="text">已发货</div>
               </template>
               <template #icon>
-                <div class="icon"><van-icon name="tosend" /></div>
-              </template>
-            </van-grid-item>
-            <van-grid-item to="/overseasOrder?status=5">
-              <template #text>
-                <div class="text">已签收</div>
-              </template>
-              <template #icon>
-                <div class="icon"><van-icon name="sign" /></div>
+                <div class="icon">
+                  <van-icon name="sign" />
+                </div>
               </template>
             </van-grid-item>
           </van-grid>
@@ -155,18 +171,17 @@ export default {
     [CellGroup.name]: CellGroup,
     [Cell.name]: Cell,
     [Grid.name]: Grid,
-    [GridItem.name]: GridItem
+    [GridItem.name]: GridItem,
   },
   data() {
     return {
       accountList: [],
-      nickName: ''
+      nickName: "",
     };
   },
   created() {
     this.nickName = this.$store.state.authenticationData.nickName;
-  }
-
+  },
 };
 </script>
 <style lang="less">

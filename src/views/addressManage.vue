@@ -13,7 +13,7 @@
         @add="onAdd"
         @edit="onEdit"
       >
-        <template #item-bottom> </template>
+        <template #item-bottom></template>
       </van-address-list>
     </div>
   </div>
@@ -25,18 +25,18 @@ export default {
   components: {
     [NavBar.name]: NavBar,
     [Button.name]: Button,
-    [AddressList.name]: AddressList
+    [AddressList.name]: AddressList,
   },
   data() {
     return {
       actionType: "",
       chosenAddressId: "",
       originList: [],
-      list: []
+      list: [],
     };
   },
   created() {
-    this.initData();
+    // this.initData();
     //区分选择地址还是查看地址
     this.actionType = this.$route.query.actionType;
     this.chosenAddressId = this.$route.query.id;
@@ -44,7 +44,7 @@ export default {
   methods: {
     onClickLeft() {
       if (this.actionType == "select" && this.chosenAddressId) {
-        let row = this.originList.filter(item => {
+        let row = this.originList.filter((item) => {
           return item.id == this.chosenAddressId;
         });
         this.$store.commit("setCustomerCurrentAddress", { data: row[0] });
@@ -56,13 +56,13 @@ export default {
       if (res.ErrorCode == "9999") {
         let listData = res.Data.Results;
         this.originList = res.Data.Results;
-        this.list = listData.map(item => {
+        this.list = listData.map((item) => {
           return {
             id: item.id,
             name: item.contact,
             tel: item.city,
             address: item.address + "," + item.mobile,
-            isDefault: item.isDefault == "1" ? true : false
+            isDefault: item.isDefault == "1" ? true : false,
           };
         });
       }
@@ -72,19 +72,19 @@ export default {
       // this.$router.go(-1);
       // console.log(this.chosenAddressId);
     },
-    onDelete() { },
+    onDelete() {},
     onAdd() {
       this.$router.push({
         path: "/addressDetail",
         query: {
-          actionType: "add"
-        }
+          actionType: "add",
+        },
       });
     },
 
     onEdit(item) {
       //此处需要转换数据
-      var row = this.originList.filter(filterItem => {
+      var row = this.originList.filter((filterItem) => {
         return item.id == filterItem.id;
       });
       console.log(row);
@@ -93,11 +93,11 @@ export default {
         path: "/addressDetail",
         query: {
           actionType: "edit",
-          item: row
-        }
+          item: row,
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>

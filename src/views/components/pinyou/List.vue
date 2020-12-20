@@ -9,8 +9,40 @@
       >
         <div class="pinyou-card" v-for="(item, index) in list" :key="index">
           <van-cell-group>
-            <van-cell title="单元格" value="内容" />
-            <van-cell title="单元格" value="内容" label="描述信息" />
+            <van-cell :title="item.name" class="card-title" />
+            <van-cell class="card-progress">
+              <template #title>
+                <van-progress
+                  :percentage="30"
+                  stroke-width="10"
+                  color="#1287ff"
+                />
+                <div class="progress-tips">50% of 20kg</div>
+              </template>
+            </van-cell>
+            <van-cell>
+              <template #title>
+                <van-row class="card-bottom">
+                  <van-col span="18" class="left">
+                    <div class="tip1">
+                      <span class="money">￥200.00</span>
+                      <span class="kg">每100g(0.1kg)</span>
+                    </div>
+                    <div class="address">
+                      <van-icon name="location-o" />湖北武汉
+                    </div>
+                  </van-col>
+                  <van-col span="6" class="right">
+                    <van-button
+                      type="info"
+                      size="small"
+                      @click="gotoTransport(item.name)"
+                      >立即加入</van-button
+                    >
+                  </van-col>
+                </van-row>
+              </template>
+            </van-cell>
           </van-cell-group>
         </div>
       </van-list>
@@ -24,22 +56,26 @@ import {
   PullRefresh,
   Cell,
   CellGroup,
-  Panel,
-  Card,
   Tag,
   Button,
+  Progress,
+  Col,
+  Row,
+  Icon,
 } from "vant";
 export default {
-  name: "home",
+  name: "PinyouList",
   components: {
     [List.name]: List,
     [PullRefresh.name]: PullRefresh,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
-    [Panel.name]: Panel,
-    [Card.name]: Card,
     [Tag.name]: Tag,
     [Button.name]: Button,
+    [Progress.name]: Progress,
+    [Col.name]: Col,
+    [Row.name]: Row,
+    [Icon.name]: Icon,
   },
 
   data() {
@@ -66,12 +102,15 @@ export default {
           this.refreshing = false;
         }
 
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1);
+        for (let i = 0; i < 5; i++) {
+          let item = {
+            name: "测试美国拼友团1111华盛顿",
+          };
+          this.list.push(item);
         }
         this.loading = false;
 
-        if (this.list.length >= 40) {
+        if (this.list.length >= 10) {
           this.finished = true;
         }
       }, 1000);
@@ -88,6 +127,14 @@ export default {
       this.onLoad();
       this.refreshing = false;
     },
+    gotoTransport(data) {
+      this.$router.push({
+        path: "/startTransport",
+        query: {
+          teamName: data,
+        },
+      });
+    },
   },
 };
 </script>
@@ -97,11 +144,60 @@ export default {
     margin: 10px;
     border-radius: 5px;
     background: #fff;
-    border-top: 3px solid #4789fa;
-    box-shadow: 1px 1px 5px #bbb;
+    border-top: 3px solid #1287ff;
+    box-shadow: 1px 1px 5px #ccc;
     .van-cell-group,
     .van-cell {
       background-color: transparent;
+      text-align: left;
+    }
+    .card-title {
+      color: #1287ff;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    .card-progress {
+      .van-progress {
+        border-radius: 20px;
+        // height: 20px;
+      }
+      .progress-tips {
+        font-size: 12px;
+        color: #999;
+        margin-top: 5px;
+      }
+    }
+    .card-bottom {
+      .left {
+        .money {
+          font-size: 16px;
+          font-weight: 500;
+          color: #cb3028;
+        }
+        .kg {
+          display: inline-block;
+          margin-left: 5px;
+          font-size: 10px;
+          color: #aaa;
+        }
+        .address {
+          font-size: 12px;
+          color: #555;
+          .van-icon {
+            vertical-align: middle;
+            font-size: 15px;
+            margin-right: 2px;
+          }
+        }
+      }
+    }
+    .right {
+      text-align: right;
+      .van-button--info {
+        background-color: #1287ff;
+        border: 0.02667rem solid #1287ff;
+      }
     }
   }
 }

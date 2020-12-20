@@ -6,13 +6,13 @@
       active-color="#1087eb"
       inactive-color="#000"
     >
-      <van-tabbar-item to="/index" icon="wap-home-o"> 首页 </van-tabbar-item>
-      <van-tabbar-item to="/overseasOrder" icon="cart-o">
-        订单管理
-      </van-tabbar-item>
-      <van-tabbar-item to="/userCenter" icon="friends-o">
-        个人中心
-      </van-tabbar-item>
+      <van-tabbar-item to="/index" icon="wap-home-o">首页</van-tabbar-item>
+      <van-tabbar-item to="/orderManage" icon="cart-o"
+        >订单管理</van-tabbar-item
+      >
+      <van-tabbar-item to="/userCenter" icon="friends-o"
+        >个人中心</van-tabbar-item
+      >
     </van-tabbar>
   </div>
 </template>

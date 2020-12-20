@@ -4,7 +4,7 @@
       <div class="carousel">
         <van-swipe :autoplay="3000">
           <van-swipe-item v-for="(image, index) in images" :key="index">
-            <!-- <img v-lazy="image" width="100%" /> -->
+            <img v-lazy="image" width="100%" height="200px" />
           </van-swipe-item>
         </van-swipe>
       </div>
@@ -23,10 +23,40 @@
       <div class="section-two">
         <van-grid :column-num="2" :gutter="10">
           <van-grid-item>
-            <van-button type="info">开始转运</van-button>
+            <div class="top">
+              <van-row>
+                <van-col span="16">
+                  <h2>包裹转运</h2>
+                  <p>方便快捷</p>
+                </van-col>
+                <van-col span="8" class="img-box">
+                  <img src="../assets/icon1.png" alt class="icon-img" />
+                </van-col>
+              </van-row>
+            </div>
+            <div class="bottom">
+              <van-button type="info" @click="goToTransport()"
+                >开始转运</van-button
+              >
+            </div>
           </van-grid-item>
           <van-grid-item>
-            <van-button type="primary">马上拼邮</van-button>
+            <div class="top">
+              <van-row>
+                <van-col span="16">
+                  <h2>省钱拼邮</h2>
+                  <p>运费低时效快</p>
+                </van-col>
+                <van-col span="8" class="img-box">
+                  <img src="../assets/icon1.png" alt class="icon-img" />
+                </van-col>
+              </van-row>
+            </div>
+            <div class="bottom">
+              <van-button type="primary" @click="goToPinyou()"
+                >开始拼邮</van-button
+              >
+            </div>
           </van-grid-item>
         </van-grid>
       </div>
@@ -35,14 +65,13 @@
         <div class="s-header">
           <van-divider
             :style="{
-              color: '#1989fa',
-              borderColor: '#1989fa',
+              color: '#333',
+              borderColor: '#aaa',
               padding: '0 16px',
               fontSize: '16px',
             }"
+            >正在拼邮</van-divider
           >
-            正在拼邮
-          </van-divider>
         </div>
         <div class="s-list">
           <PinyouList></PinyouList>
@@ -65,6 +94,8 @@ import {
   SwipeItem,
   Button,
   Divider,
+  Col,
+  Row,
 } from "vant";
 import FooterCom from "@/components/FooterCom";
 import PinyouList from "./components/pinyou/List";
@@ -81,6 +112,8 @@ export default {
     [SwipeItem.name]: SwipeItem,
     [Button.name]: Button,
     [Divider.name]: Divider,
+    [Col.name]: Col,
+    [Row.name]: Row,
   },
   data() {
     return {
@@ -112,7 +145,7 @@ export default {
         {
           name: "订单管理",
           icon: "logistics",
-          to: "/overseasOrder",
+          to: "/orderManage",
         },
       ],
     };
@@ -121,6 +154,12 @@ export default {
     console.log(this.$route.meta);
   },
   methods: {
+    goToPinyou() {
+      this.$router.push("/startPinyou");
+    },
+    goToTransport() {
+      this.$router.push("/startTransport");
+    },
     handleBanner(url) {
       console.log(url);
     },
@@ -130,20 +169,6 @@ export default {
 <style lang="less">
 .index-wrap {
   padding-bottom: 60px;
-  .header {
-    background-color: #fff;
-    margin-bottom: 4px;
-    .van-nav-bar {
-      background: #1087eb;
-      height: 38px;
-      .van-nav-bar__title {
-        color: #fff;
-      }
-      .van-icon {
-        color: #fff;
-      }
-    }
-  }
   .content {
     [class*="van-hairline"]::after {
       border: none;
@@ -152,7 +177,7 @@ export default {
       margin-bottom: 10px;
     }
     .section-one {
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       .grid {
         font-size: 16px;
         color: #1087eb;
@@ -160,7 +185,7 @@ export default {
           background-color: transparent;
         }
         .van-icon {
-          font-size: 30px;
+          font-size: 34px;
         }
         .van-grid-item__text {
           font-size: 13px;
@@ -170,15 +195,60 @@ export default {
     }
     .section-two {
       .van-grid-item__content--center {
-        padding: 0px;
+        padding: 0;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+      }
+      .top {
+        margin: 15px 0;
+        width: 100%;
+        .img-box {
+          text-align: left;
+          .icon-img {
+            margin-top: 6px;
+            width: 40px;
+          }
+        }
+
+        h2 {
+          font-size: 15px;
+          color: #333;
+          margin-bottom: 5px;
+        }
+        p {
+          font-size: 10px;
+          width: 85px;
+          margin: 0 auto;
+          background: #a3d4ff;
+          border-radius: 10px;
+          padding: 2px;
+          color: #fff;
+        }
+      }
+      .bottom {
+        width: 100%;
         .van-button {
           width: 100%;
+          border-top-right-radius: 0;
+          border-top-left-radius: 0;
+          font-size: 15px;
+        }
+        .van-button--info {
+          background-color: #1287ff;
+        }
+        .van-button--primary {
+          background-color: #69bb20;
         }
       }
     }
     .section-three {
       .s-header {
-        margin-bottom: 10px;
+        margin-top: 20px;
+        font-size: 15px;
+        font-weight: 600;
+        .van-divider {
+          margin: 0px;
+        }
       }
     }
   }

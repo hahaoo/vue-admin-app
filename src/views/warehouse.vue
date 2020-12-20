@@ -2,7 +2,6 @@
   <div class="warehouse-wrap">
     <div class="header">
       <van-nav-bar title="仓库地址" left-arrow @click-left="onClickLeft" />
-      <!-- <a href="http://192.168.3.4:8022/login">测试登录</a> -->
     </div>
     <div class="content" v-for="(item, index) in warehouseList" :key="index">
       <van-tag type="warning" class="defalut-tag" v-if="item.isDefault == '1'"
@@ -12,14 +11,12 @@
         <van-tab :title="item.name">
           <van-form>
             <van-field
-              left-icon="user-o"
               label="收货人:"
               label-width="70px"
               readonly
               v-model="item.receiver"
             />
             <van-field
-              left-icon="location-o"
               label="所在地区:"
               rows="1"
               autosize
@@ -32,7 +29,6 @@
               </template>
             </van-field>
             <van-field
-              left-icon="location-o"
               label="街道地址:"
               rows="1"
               autosize
@@ -42,18 +38,25 @@
               v-model="item.address"
             />
             <van-field
-              left-icon="phone-o"
               label="手机号码:"
               label-width="70px"
               readonly
               v-model="item.mobile"
             />
             <van-field
-              left-icon="idcard"
               label="邮政编码:"
               label-width="70px"
               readonly
               v-model="item.zipcode"
+            />
+            <van-field
+              label="备注信息:"
+              label-width="70px"
+              type="textarea"
+              rows="5"
+              autosize
+              readonly
+              v-model="item.remark"
             />
           </van-form>
         </van-tab>
@@ -65,7 +68,7 @@
 <script>
 // @ is an alias to /src
 import { NavBar, Form, Field, Button, Tab, Tabs, Tag } from "vant";
-import { findSupplierByDistributorApi } from "@/api/index";
+// import { findSupplierByDistributorApi } from "@/api/index";
 export default {
   name: "package",
   components: {
@@ -75,12 +78,25 @@ export default {
     [Button.name]: Button,
     [Tab.name]: Tab,
     [Tabs.name]: Tabs,
-    [Tag.name]: Tag
+    [Tag.name]: Tag,
   },
   data() {
     return {
       showTag: false,
-      warehouseList: []
+      warehouseList: [
+        {
+          name: "仓库地址1",
+          receiver: "俊哥",
+          province: "湖北省",
+          city: "武汉市",
+          area: "洪山区",
+          address: "光谷大道光谷时代",
+          mobile: "111111",
+          zipcode: "2222",
+          remark:
+            "强调：若使用淘宝的定位功能，麻烦不要定位至（盛富公寓),离我们仓库实际距离1500米，若是错误定位导致的包裹丢失或未成功正确妥投的责任由客户自行承担",
+        },
+      ],
     };
   },
   created() {
@@ -90,18 +106,8 @@ export default {
     onClickLeft() {
       this.$router.go(-1);
     },
-    async initData() {
-      console.log(this.$store.state.authenticationData);
-      // let data = {
-      //   api: "api.UserAddress.findSupplierByDistributor",
-      //   edatas: this.$store.state.authenticationData
-      // };
-      let res = await findSupplierByDistributorApi();
-      if (res.ErrorCode == "9999") {
-        this.warehouseList = res.Data.Results;
-      }
-    }
-  }
+    async initData() {},
+  },
 };
 </script>
 <style lang="less">

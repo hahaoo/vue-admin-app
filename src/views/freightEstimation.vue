@@ -36,8 +36,7 @@
           label-width="80px"
           v-model="form.voloum"
           placeholder="请填写长宽高（cm），用逗号隔开"
-        >
-        </van-field>
+        ></van-field>
         <div class="note-box">
           <p class="red">温馨提示：</p>
           <p class="red">
@@ -45,8 +44,8 @@
             避免价格波动补差价的情况。物流时效 预计延迟
             5-7个工作日，谢谢大家的理解和支持。
           </p>
-          <P
-            ><span class="red">*</span
+          <P>
+            <span class="red">*</span
             >以上查询到的运费默认按普货计算，计费重量按体积重（长*宽*高/6000）与实重中较大者计算。
           </P>
           <p><span class="red">*</span>食品和化妆品另加收￥20.00/kg。</p>
@@ -55,16 +54,15 @@
             处理费，每单最低按￥80.00 收取。
           </p>
         </div>
-        <div style="margin: 26px;">
+        <div style="margin: 26px">
           <van-button
             round
             block
             type="info"
             native-type="submit"
-            style="margin-bottom: 16px;"
+            style="margin-bottom: 16px"
+            >立即查询</van-button
           >
-            立即查询
-          </van-button>
         </div>
       </van-form>
     </div>
@@ -102,8 +100,8 @@
           </van-col>
           <van-col span="12">
             <div class="label">包裹重量</div>
-            <div>{{ form.weight ? form.weight : 0 }} (kg)</div></van-col
-          >
+            <div>{{ form.weight ? form.weight : 0 }} (kg)</div>
+          </van-col>
         </van-row>
 
         <div v-if="feeList.length > 0">
@@ -135,11 +133,19 @@
   </div>
 </template>
 <script>
+import { getCountrysApi, getShippingFeeByWeight } from "@/api/index";
 import {
-  getCountrysApi,
-  getShippingFeeByWeight
-} from "@/api/index";
-import { NavBar, Form, Field, Button, Popup, Picker, Col, Row, Cell, CellGroup } from "vant";
+  NavBar,
+  Form,
+  Field,
+  Button,
+  Popup,
+  Picker,
+  Col,
+  Row,
+  Cell,
+  CellGroup,
+} from "vant";
 export default {
   components: {
     [NavBar.name]: NavBar,
@@ -163,15 +169,15 @@ export default {
         departure: "中国仓",
         countryCode: "",
         weight: "",
-        voloum: ""
+        voloum: "",
       },
       show: false, //国家的选择
-      showFeeList: false,  // 查询结果
+      showFeeList: false, // 查询结果
       feeList: [],
     };
   },
   created() {
-    this.initData();
+    // this.initData();
   },
 
   methods: {
@@ -188,7 +194,7 @@ export default {
           let item = {
             text: i,
             children: [],
-          }
+          };
           for (let j in arr[i]) {
             arr[i][j].text = arr[i][j].nameCN;
             item.children.push(arr[i][j]);
@@ -214,16 +220,17 @@ export default {
     },
     async onSubmit() {
       console.log(this.form);
-      var volumeArr = (this.form.voloum && this.form.voloum.split(/,|，/gi)) || [0, 0, 0];
+      var volumeArr = (this.form.voloum &&
+        this.form.voloum.split(/,|，/gi)) || [0, 0, 0];
       var sendData = {
         countryCode: this.form.countryCode,
         weight: 1000 * Number(this.form.weight),
         long: Number(volumeArr[0]),
         width: Number(volumeArr[1]),
-        height: Number(volumeArr[2])
-      }
+        height: Number(volumeArr[2]),
+      };
       let res = await getShippingFeeByWeight(sendData);
-      if (res && res.ErrorCode == '9999') {
+      if (res && res.ErrorCode == "9999") {
         this.showFeeList = true;
         this.feeList = res.Data.Results;
       }
@@ -232,9 +239,9 @@ export default {
       this.showFeeList = false;
     },
     goToApply() {
-      this.$router.push('/packageApply');
-    }
-  }
+      this.$router.push("/packageApply");
+    },
+  },
 };
 </script>
 <style lang="less">

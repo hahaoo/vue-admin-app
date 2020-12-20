@@ -5,10 +5,12 @@ import VueRouter from "vue-router";
 
 import login from "../views/login.vue";
 import index from "../views/index.vue";
-import userCenter from "../views/userCenter.vue";
+import startPinyou from "../views/startPinyou.vue"; //开始转运
+import startTransport from "../views/startTransport.vue"; //开始拼邮
 
+import userCenter from "../views/userCenter.vue";
 import domesticOrder from "../views/domesticOrder.vue";
-import overseasOrder from "../views/overseasOrder.vue";
+import orderManage from "../views/orderManage.vue";
 import packageApply from "../views/packageApply.vue";
 import warehouse from "../views/warehouse.vue";
 import addressManage from "../views/addressManage.vue";
@@ -20,99 +22,148 @@ import orderDetail from "../views/orderDetail.vue";
 import freightEstimation from "../views/freightEstimation.vue";
 import production from "../views/production.vue"; //介绍
 
-
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    redirect: "/index"
+    redirect: "/index",
   },
   {
     path: "/login",
     name: "login",
     meta: {
-      loginRequired: false
+      loginRequired: false,
     },
-    component: login
+    component: login,
   },
   {
     path: "/index",
     name: "index",
     meta: {
-      loginRequired: false
+      loginRequired: false,
     },
-    component: index
+    component: index,
   },
+  {
+    path: "/startPinyou",
+    name: "startPinyou",
+    meta: {
+      loginRequired: false,
+    },
+    component: startPinyou,
+  },
+  {
+    path: "/startTransport",
+    name: "startTransport",
+    meta: {
+      loginRequired: false,
+    },
+    component: startTransport,
+  },
+
   {
     path: "/production",
     name: "production",
     meta: {
-      loginRequired: false
+      loginRequired: false,
     },
-    component: production
+    component: production,
   },
   {
-    path: "/overseasOrder",
-    name: "overseasOrder",
-    component: overseasOrder
+    path: "/orderManage",
+    name: "orderManage",
+    meta: {
+      loginRequired: false,
+    },
+    component: orderManage,
   },
   {
     path: "/domesticOrder",
     name: "domesticOrder",
-    component: domesticOrder
+    meta: {
+      loginRequired: false,
+    },
+    component: domesticOrder,
   },
   {
     path: "/userCenter",
     name: "userCenter",
-    component: userCenter
+    meta: {
+      loginRequired: false,
+    },
+    component: userCenter,
   },
   {
     path: "/packageApply",
     name: "packageApply",
-    component: packageApply
+    meta: {
+      loginRequired: false,
+    },
+    component: packageApply,
   },
   {
     path: "/warehouse",
     name: "warehouse",
-    component: warehouse
+    meta: {
+      loginRequired: false,
+    },
+    component: warehouse,
   },
   {
     path: "/addressManage",
     name: "addressManage",
-    component: addressManage
+    meta: {
+      loginRequired: false,
+    },
+    component: addressManage,
   },
   {
     path: "/addressDetail",
     name: "addressDetail",
-    component: addressDetail
+    meta: {
+      loginRequired: false,
+    },
+    component: addressDetail,
   },
   {
     path: "/confirmSend",
     name: "confirmSend",
-    component: confirmSend
+    meta: {
+      loginRequired: false,
+    },
+    component: confirmSend,
   },
   {
     path: "/postLimit",
     name: "postLimit",
-    component: postLimit
+    meta: {
+      loginRequired: false,
+    },
+    component: postLimit,
   },
   {
     path: "/orderDetail",
     name: "orderDetail",
-    component: orderDetail
+    meta: {
+      loginRequired: false,
+    },
+    component: orderDetail,
   },
   {
     path: "/freightEstimation",
     name: "freightEstimation",
-    component: freightEstimation
-  }
+    meta: {
+      loginRequired: false,
+    },
+    component: freightEstimation,
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 //全局拦截 调试的时候关闭

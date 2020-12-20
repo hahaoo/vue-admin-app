@@ -1,7 +1,7 @@
 <template>
   <div class="overseas-wrap">
     <div class="header">
-      <van-nav-bar title="我的海外订单" left-arrow @click-left="onClickLeft" />
+      <van-nav-bar title="我的订单" left-arrow @click-left="onClickLeft" />
     </div>
     <div class="content">
       <van-tabs
@@ -13,16 +13,19 @@
         title-active-color="#333"
         @change="onClickTab"
       >
-        <van-tab title="待付款" :name="1">
+        <van-tab title="已预报" :name="1">
           <order-list :status="active"></order-list>
         </van-tab>
-        <van-tab title="待出库" :name="2">
+        <van-tab title="已上架" :name="2">
           <order-list :status="active"></order-list>
         </van-tab>
-        <van-tab title="已发货" :name="4">
+        <van-tab title="待打包" :name="3">
           <order-list :status="active"></order-list>
         </van-tab>
-        <van-tab title="已签收" :name="5">
+        <van-tab title="已出库" :name="4">
+          <order-list :status="active"></order-list>
+        </van-tab>
+        <van-tab title="已发货" :name="5">
           <order-list :status="active"></order-list>
         </van-tab>
       </van-tabs>
@@ -40,11 +43,11 @@ export default {
     OrderList,
     [NavBar.name]: NavBar,
     [Tab.name]: Tab,
-    [Tabs.name]: Tabs
+    [Tabs.name]: Tabs,
   },
   data() {
     return {
-      active: 1
+      active: 1,
     };
   },
   created() {
@@ -57,8 +60,8 @@ export default {
       // console.log(this.$router);
       this.$router.go(-1);
     },
-    onClickTab() { }
-  }
+    onClickTab() {},
+  },
 };
 </script>
 <style lang="less">
