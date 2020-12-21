@@ -30,7 +30,7 @@
                   <p>方便快捷</p>
                 </van-col>
                 <van-col span="8" class="img-box">
-                  <img src="../assets/icon1.png" alt class="icon-img" />
+                  <img src="../assets/transportIcon.png" alt class="icon-img" />
                 </van-col>
               </van-row>
             </div>
@@ -48,7 +48,7 @@
                   <p>运费低时效快</p>
                 </van-col>
                 <van-col span="8" class="img-box">
-                  <img src="../assets/icon1.png" alt class="icon-img" />
+                  <img src="../assets/pinyouIcon.png" alt class="icon-img" />
                 </van-col>
               </van-row>
             </div>
@@ -206,7 +206,7 @@ export default {
           text-align: left;
           .icon-img {
             margin-top: 6px;
-            width: 40px;
+            height: 40px;
           }
         }
 
@@ -235,9 +235,11 @@ export default {
         }
         .van-button--info {
           background-color: #1287ff;
+          border-color: #1287ff;
         }
         .van-button--primary {
           background-color: #69bb20;
+          border-color: #69bb20;
         }
       }
     }

@@ -5,9 +5,13 @@
     </div>
     <div class="content">
       <van-grid :column-num="2" direction="horizontal" :gutter="3">
-        <van-grid-item class="item">
-          <img src="../../assets/icon1.png" alt class="item-img" />
-          <span class="item-text">普货</span>
+        <van-grid-item
+          class="item"
+          v-for="item in normalTypeList"
+          :key="item.id"
+        >
+          <img :src="item.imgSrc" alt class="item-img" />
+          <span class="item-text">{{ item.name }}</span>
         </van-grid-item>
       </van-grid>
 
@@ -43,46 +47,53 @@ export default {
   },
   data() {
     return {
+      normalTypeList: [
+        {
+          id: "0",
+          name: "普货",
+          imgSrc: "./icon/otherIcon.png",
+        },
+      ],
       typeList: [
         {
           id: "1",
           name: "仿牌",
-          imgSrc: "./icon/icon1.png",
+          imgSrc: "./icon/bagIcon.png",
         },
         {
           id: "2",
           name: "带电产品",
-          imgSrc: "./icon/icon1.png",
+          imgSrc: "./icon/eletricIcon.png",
         },
         {
           id: "3",
           name: "生活电器",
-          imgSrc: "./icon/icon1.png",
+          imgSrc: "./icon/homeApplicationIcon.png",
         },
         {
           id: "4",
           name: "化妆品",
-          imgSrc: "./icon/icon1.png",
+          imgSrc: "./icon/makeupIcon.png",
         },
         {
           id: "5",
           name: "欧美品牌",
-          imgSrc: "./icon/icon1.png",
+          imgSrc: "./icon/bandIcon.png",
         },
         {
           id: "6",
           name: "粉末",
-          imgSrc: "./icon/icon1.png",
+          imgSrc: "./icon/dustIcon.png",
         },
         {
           id: "7",
           name: "食品",
-          imgSrc: "./icon/icon1.png",
+          imgSrc: "./icon/foodIcon.png",
         },
         {
           id: "8",
           name: "液体",
-          imgSrc: "./icon/icon1.png",
+          imgSrc: "./icon/liquidIcon.png",
         },
       ],
     };

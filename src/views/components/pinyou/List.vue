@@ -104,7 +104,8 @@ export default {
 
         for (let i = 0; i < 5; i++) {
           let item = {
-            name: "测试美国拼友团1111华盛顿",
+            name:
+              "测试美国拼友团1111华盛顿测试美国拼友团1111华盛顿测试美国拼友团1111华盛顿",
           };
           this.list.push(item);
         }
