@@ -13,7 +13,7 @@
             <van-cell class="card-progress">
               <template #title>
                 <van-progress
-                  :percentage="30"
+                  :percentage="110"
                   stroke-width="10"
                   color="#1287ff"
                 />

@@ -54,7 +54,7 @@
             </div>
             <div class="bottom">
               <van-button type="primary" @click="goToPinyou()"
-                >开始拼邮</van-button
+                >马上拼邮</van-button
               >
             </div>
           </van-grid-item>

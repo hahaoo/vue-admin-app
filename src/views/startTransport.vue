@@ -8,10 +8,11 @@
       <van-form @submit="onSubmit" class="form">
         <van-field
           v-model="form.name"
-          label="商品名称"
-          placeholder="请输入商品名"
+          label="商品备注"
+          placeholder="请输入商品备注"
         />
         <van-field
+          required
           readonly
           clickable
           :value="form.type"
@@ -23,6 +24,16 @@
           <template #input>
             <van-stepper v-model="form.number" />
           </template>
+        </van-field>
+        <van-field
+          required
+          v-model="form.trackNumber"
+          label="快递单号"
+          rows="3"
+          autosize
+          type="textarea"
+          placeholder="可以填写多个快递单号，请用逗号,分号，空格，回车键隔开"
+        >
         </van-field>
         <van-field
           v-model="form.remark"
