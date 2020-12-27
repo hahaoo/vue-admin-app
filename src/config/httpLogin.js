@@ -32,11 +32,12 @@ Axios.interceptors.response.use(
     return res.data;
   },
   error => {
+    // console.log(error);
     //服务器状态码不是200的情况
-    Notify({
-      type: "danger",
-      message: "请求异常:" + error.response.status + ",消息:" + error.response.data + "," + error.response.statusText
-    });
+    // Notify({
+    //   type: "danger",
+    //   message: "请求异常:" + error.response.status + ",消息:" + error.response.data + "," + error.response.statusText
+    // });
     return Promise.reject(error);
   }
 );

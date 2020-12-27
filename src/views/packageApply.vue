@@ -45,7 +45,7 @@
             <span class="title">邮寄限制:</span>
             <span class="note"
               >详见
-              <a style="color: #1096f0;" @click="goToPostLimit()">
+              <a style="color: #1096f0" @click="goToPostLimit()">
                 《邮寄限制》
               </a>
             </span>
@@ -61,7 +61,7 @@
             <span class="note">提交包裹后注意去国内包裹添加物流信息</span>
           </van-row>
         </div>
-        <div style="margin: 16px;">
+        <div style="margin: 16px">
           <van-button round block type="info" native-type="submit">
             提交
           </van-button>
@@ -85,7 +85,7 @@ import {
   Cell,
 } from "vant";
 import {
-  findSupplierByDistributorApi,
+  findTbWarehouseApi,
   addByDistributorApi,
   changeByUserApi,
 } from "@/api/index";
@@ -136,7 +136,7 @@ export default {
     addNumber() {},
     //初始化获取仓库地址列表
     async initData() {
-      let res = await findSupplierByDistributorApi();
+      let res = await findTbWarehouseApi();
       if (res.ErrorCode == "9999") {
         let list = res.Data.Results; //默认仓库
         this.warehouseForm = list.filter((item) => {
@@ -147,7 +147,7 @@ export default {
     },
     //编辑的时候初始化地址
     async initAddressData(id) {
-      let res = await findSupplierByDistributorApi();
+      let res = await findTbWarehouseApi();
       if (res.ErrorCode == "9999") {
         let list = res.Data.Results; //默认仓库
         this.warehouseForm = list.filter((item) => {

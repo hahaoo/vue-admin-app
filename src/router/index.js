@@ -1,15 +1,15 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-// import store from "@/store";
-// import { isLoginApi } from "@/api/login.js";
+import store from "@/store";
+import { loginApi } from "@/api/login.js";
 
 import login from "../views/login.vue";
 import index from "../views/index.vue";
 import startPinyou from "../views/startPinyou.vue"; //开始转运
 import startTransport from "../views/startTransport.vue"; //开始拼邮
+import pinyouDetail from "../views/pinyouDetail.vue"; //拼邮详情
 
 import userCenter from "../views/userCenter.vue";
-import domesticOrder from "../views/domesticOrder.vue";
 import orderManage from "../views/orderManage.vue";
 import packageApply from "../views/packageApply.vue";
 import warehouse from "../views/warehouse.vue";
@@ -40,28 +40,23 @@ const routes = [
   {
     path: "/index",
     name: "index",
-    meta: {
-      loginRequired: false,
-    },
     component: index,
   },
   {
     path: "/startPinyou",
     name: "startPinyou",
-    meta: {
-      loginRequired: false,
-    },
     component: startPinyou,
   },
   {
     path: "/startTransport",
     name: "startTransport",
-    meta: {
-      loginRequired: false,
-    },
     component: startTransport,
   },
-
+  {
+    path: "/pinyouDetail",
+    name: "pinyouDetail",
+    component: pinyouDetail,
+  },
   {
     path: "/production",
     name: "production",
@@ -78,14 +73,7 @@ const routes = [
     },
     component: orderManage,
   },
-  {
-    path: "/domesticOrder",
-    name: "domesticOrder",
-    meta: {
-      loginRequired: false,
-    },
-    component: domesticOrder,
-  },
+
   {
     path: "/userCenter",
     name: "userCenter",
@@ -105,9 +93,6 @@ const routes = [
   {
     path: "/warehouse",
     name: "warehouse",
-    meta: {
-      loginRequired: false,
-    },
     component: warehouse,
   },
   {
@@ -167,51 +152,35 @@ const router = new VueRouter({
 });
 
 //全局拦截 调试的时候关闭
-// router.beforeEach((to, from, next) => {
-//   var meta = to.meta;
-//   var loginRequired = false;
-//   console.log(to);
-
-//   if (!("loginRequired" in meta)) {
-//     loginRequired = true;
-//   } else {
-//     loginRequired = meta["loginRequired"];
-//   }
-
-//   console.log(to);
-//   /**
-//    * 必须登录
-//    */
-//   if (loginRequired) {
-//     isLoginApi()
-//       .then(res => {
-//         if (res.flag) {
-//           let data = {
-//             apiUserToken: res.data.apiToken,
-//             apiUserId: res.data.outerUserId,
-//             nickName: res.data.nickName,
-//             apiSubUserId: "0"
-//           };
-//           // alert(JSON.stringify(data));
-//           store.commit("setAuthData", { data: data });
-//           next();
-//         } else {
-//           let severname =
-//             window.location.protocol +
-//             "//" +
-//             window.location.hostname +
-//             (window.location.port ? ":" + window.location.port : "");
-//             var successUrl = severname + to.fullPath;
-//             localStorage.setItem("successUrl", successUrl);
-//             let redirectUrl = severname + "/login"
-//             window.location.href = `${severname}/wechat/oAuth2Api/auth?redirectUrl=${redirectUrl}`;
-//         }
-//       })
-//       .catch(); //判断是否登录
-//   } else {
-//     //alert("next")
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  var meta = to.meta;
+  var loginRequired = false;
+  if (!("loginRequired" in meta)) {
+    loginRequired = true;
+  } else {
+    loginRequired = meta["loginRequired"];
+  }
+  /**
+   * 必须登录,登录测试
+   */
+  if (loginRequired) {
+    if (store.state.token) {
+      next();
+    } else {
+      loginApi()
+        .then((res) => {
+          if (res.ack == "200") {
+            store.commit("setAuthToken", res.data.token);
+            store.commit("setEmployeeData", res.data.employee);
+            next();
+          }
+        })
+        .catch();
+    }
+  } else {
+    //alert("next")
+    next();
+  }
+});
 
 export default router;

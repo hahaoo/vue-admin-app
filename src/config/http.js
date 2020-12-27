@@ -1,6 +1,6 @@
 import axios from "axios";
 import { rootPath } from "./globalParam";
-// import router from "@/router/index.js";
+import router from "@/router/index.js";
 import store from "@/store/index";
 import { Notify, Toast } from "vant";
 
@@ -19,22 +19,24 @@ const Axios = axios.create({
 //添加请求拦截器
 Axios.interceptors.request.use(
   config => {
-    console.log("config1111------", config);
-    // 在发送请求之前做些什么，封装请求参数
-    let data = {
-      api: config.data.api,
-      edatas: Object.assign(
-        {},
-        store.state.authenticationData,
-        config.data.edatas
-      )
-    };
+    // 在发送请求之前做些什么，封装请求参数 
+    if (store.state.token) {
+      config.headers.common["token"] = store.state.token;
+    }
+    config.headers.common["lang"] = "zh_CN";
+    let data = Object.assign(
+      {},
+      { companyid: store.state.employee.companyid },
+      config.data
+    );
     config.data = JSON.stringify(data);
+
     return config;
   },
   error => {
     // error 的回调信息
     // console.log("request：error", error);
+    router.push("/login");
     return Promise.reject(error.data.error.message);
   }
 );
@@ -42,29 +44,29 @@ Axios.interceptors.request.use(
 //返回状态判断(添加响应拦截器)
 Axios.interceptors.response.use(
   res => {
-    // console.log("response：res", res);
+    console.log("response：res", res);
     //对响应数据做些事 200 status 业务状态统一处理，其他返回业务
     //ErrorCode 为 9999 表示请求成功
     //1002 表示登录失效，需要重新登录
-    switch (res.data.ErrorCode) {
-      case "9999":
-        break;
-      case "1002":
-        window.location.reload();
-        break;
-      default:
-        let msg = res.data.Message;
-        msg ? Toast.fail(msg) : Toast.fail("服务器发生错误");
-    }
+    // switch (res.data.ErrorCode) {
+    //   case "9999":
+    //     break;
+    //   case "1002":
+    //     window.location.reload();
+    //     break;
+    //   default:
+    //     let msg = res.data.Message;
+    //     msg ? Toast.fail(msg) : Toast.fail("服务器发生错误");
+    // }
     return res.data;
   },
   error => {
     //服务器状态码不是200的情况
     console.log(error.response);
-    Notify({
-      type: "danger",
-      message: "请求异常:" + error.response.status + ",消息:" + error.response.data + "," + error.response.statusText
-    });
+    // Notify({
+    //   type: "danger",
+    //   message: "请求异常:" + error.response.status + ",消息:" + error.response.data + "," + error.response.statusText
+    // });
     return Promise.reject(error);
   }
 );

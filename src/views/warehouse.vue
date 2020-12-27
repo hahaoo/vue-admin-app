@@ -8,13 +8,13 @@
         >默认仓库</van-tag
       >
       <van-tabs color="#1087eb" title-inactive-color="#939393">
-        <van-tab :title="item.name">
+        <van-tab :title="item.warehouseName">
           <van-form>
             <van-field
               label="收货人:"
               label-width="70px"
               readonly
-              v-model="item.receiver"
+              v-model="item.contact"
             />
             <van-field
               label="所在地区:"
@@ -25,7 +25,7 @@
               readonly
             >
               <template #input>
-                <div>{{ item.province + item.city + item.area }}</div>
+                <div>{{ item.province + item.city + item.district }}</div>
               </template>
             </van-field>
             <van-field
@@ -41,7 +41,7 @@
               label="手机号码:"
               label-width="70px"
               readonly
-              v-model="item.mobile"
+              v-model="item.tel"
             />
             <van-field
               label="邮政编码:"
@@ -68,7 +68,7 @@
 <script>
 // @ is an alias to /src
 import { NavBar, Form, Field, Button, Tab, Tabs, Tag } from "vant";
-// import { findSupplierByDistributorApi } from "@/api/index";
+import { findTbWarehouseApi } from "@/api/index";
 export default {
   name: "package",
   components: {
@@ -82,17 +82,12 @@ export default {
   },
   data() {
     return {
+      searchParam: {},
       showTag: false,
       warehouseList: [
         {
-          name: "仓库地址1",
-          receiver: "俊哥",
-          province: "湖北省",
-          city: "武汉市",
-          area: "洪山区",
-          address: "光谷大道光谷时代",
-          mobile: "111111",
-          zipcode: "2222",
+          warehouseName: "",
+          zipcode: "",
           remark:
             "强调：若使用淘宝的定位功能，麻烦不要定位至（盛富公寓),离我们仓库实际距离1500米，若是错误定位导致的包裹丢失或未成功正确妥投的责任由客户自行承担",
         },
@@ -106,7 +101,12 @@ export default {
     onClickLeft() {
       this.$router.go(-1);
     },
-    async initData() {},
+    async initData() {
+      let res = await findTbWarehouseApi(this.searchParam);
+      if (res && res.ack == 200 && res.data.length > 0) {
+        this.warehouseList = res.data;
+      }
+    },
   },
 };
 </script>

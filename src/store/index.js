@@ -5,29 +5,30 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    //全局公用的权限数据 ,pc 测试的时候打开
-    authenticationData: {
-      apiUserToken: "e236ff0c44c59263ffc4f73010431d6f",
-      apiUserId: "19494",
-      nickName: "风轻云淡@1111#~",
-      apiSubUserId: "0"
-    },
+    token: "", //测试token
+    employee: {}, //所属公司信息
+
     //客户海外地址选择
     customerCurrentAddress: {},
     isLoading: false,
   },
   mutations: {
-    setAuthData(state, payload) {
-      state.authenticationData = payload.data;
+    setAuthToken(state, payload) {
+      state.token = payload;
     },
+    setEmployeeData(state, payload) {
+      console.log(payload);
+      state.employee = payload;
+    },
+
     //全局loading
     updateLoadingStatus(state, isLoading) {
-      state.isLoading = isLoading
+      state.isLoading = isLoading;
     },
     setCustomerCurrentAddress(state, payload) {
       state.customerCurrentAddress = payload.data;
-    }
+    },
   },
   actions: {},
-  modules: {}
+  modules: {},
 });

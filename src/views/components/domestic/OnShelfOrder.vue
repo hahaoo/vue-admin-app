@@ -71,7 +71,7 @@
 
 <script>
 // @ is an alias to /src
-import { findByDistributorApi } from "@/api/index";
+// import { findByDistributorApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -85,7 +85,7 @@ import {
   CheckboxGroup,
   SubmitBar,
   Popup,
-  ImagePreview
+  ImagePreview,
 } from "vant";
 export default {
   name: "home",
@@ -102,7 +102,7 @@ export default {
     [Checkbox.name]: Checkbox,
     [CheckboxGroup.name]: CheckboxGroup,
     [Popup.name]: Popup,
-    [ImagePreview.Component.name]: ImagePreview.Component
+    [ImagePreview.Component.name]: ImagePreview.Component,
   },
   data() {
     return {
@@ -113,16 +113,16 @@ export default {
       searchParam: {
         status: 2,
         page: 1,
-        rowsPerPage: 10
+        rowsPerPage: 10,
       },
       checked: false,
       loading: false,
       finished: false,
       refreshing: false,
-      pageNum: 0 //分页
+      pageNum: 0, //分页
     };
   },
-  created() { },
+  created() {},
   watch: {
     checkedResults(val) {
       if (val.length == this.list.length) {
@@ -130,7 +130,7 @@ export default {
       } else {
         this.checked = false;
       }
-    }
+    },
   },
   methods: {
     formatStatus(status) {
@@ -151,25 +151,24 @@ export default {
     },
     //获取数据
     async getList(pageNum) {
-      this.searchParam.page = pageNum;
-      let res = await findByDistributorApi(this.searchParam);
-      if (res.ErrorCode == "9999" && res.Data.Results.length > 0) {
-        var data = res.Data.Results;
-        for (var i = 0; i < data.length; i++) {
-          this.list.push(data[i]);
-        }
-        if (this.list.length >= res.Data.Pagination.totalCount) {
-          this.finished = true;
-        }
-      } else {
-        this.finished = true;
-      }
-      this.loading = false;
+      // this.searchParam.page = pageNum;
+      // let res = await findByDistributorApi(this.searchParam);
+      // if (res.ErrorCode == "9999" && res.Data.Results.length > 0) {
+      //   var data = res.Data.Results;
+      //   for (var i = 0; i < data.length; i++) {
+      //     this.list.push(data[i]);
+      //   }
+      //   if (this.list.length >= res.Data.Pagination.totalCount) {
+      //     this.finished = true;
+      //   }
+      // } else {
+      //   this.finished = true;
+      // }
+      // this.loading = false;
     },
     onLoad() {
       this.loading = true;
       this.getList(++this.pageNum);
-
     },
     onRefresh() {
       // 清空列表数据
@@ -189,13 +188,13 @@ export default {
       if (item.imgUrl) {
         this.images = [item.imgUrl];
       } else {
-        this.images = ['3.png'];
+        this.images = ["3.png"];
       }
       ImagePreview({
         images: this.images,
         closeable: true,
         loop: false, //是否循环播放\
-      })
+      });
     },
     checkAll() {
       if (this.checked) {
@@ -207,18 +206,18 @@ export default {
     onSubmit() {
       console.log(this.checkedResults);
       if (this.checkedResults.length > 0) {
-        let ftItem = this.list.filter(item => {
+        let ftItem = this.list.filter((item) => {
           return this.checkedResults.includes(item.id);
         });
         let totalWeight = ftItem
-          .map(item => {
+          .map((item) => {
             return item.weight;
           })
           .reduce((x, y) => {
             return Number(x) + Number(y);
           });
 
-        let volumeArr = ftItem.map(item => {
+        let volumeArr = ftItem.map((item) => {
           return item.long * item.width * item.height;
         });
 
@@ -229,15 +228,15 @@ export default {
             weight: totalWeight,
             data: JSON.stringify({
               ids: this.checkedResults,
-              volumeArr: volumeArr
-            })
-          }
+              volumeArr: volumeArr,
+            }),
+          },
         });
       } else {
         this.$notify("至少选中一个包裹");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less">

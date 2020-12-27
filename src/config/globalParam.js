@@ -1,4 +1,4 @@
-const baseUrl = "/h5.php"; //暂时测试
+const baseUrl = "/wechat"; //暂时测试
 
 export const rootPath = baseUrl;
 

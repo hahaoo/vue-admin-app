@@ -4,7 +4,7 @@
       <van-nav-bar :title="headTitle" left-arrow @click-left="onClickLeft" />
     </div>
     <div class="content">
-      <div class="pinyou-team-box" v-if="teamName">{{ teamName }}</div>
+      <div class="pinyou-team-box" v-if="groupName">{{ groupName }}</div>
       <van-form @submit="onSubmit" class="form">
         <van-field
           v-model="form.name"
@@ -49,12 +49,12 @@
             <van-cell icon="location-o" is-link @click="onChangeWarehouse()">
               <template #title>
                 <div class="van-address-item__name">
-                  {{ warehouseForm.receiver }}转{{ warehouseForm.customerName }}
-                  {{ warehouseForm.mobile }}
+                  {{ warehouseForm.contact }}转{{ warehouseForm.creatorName }}
+                  {{ warehouseForm.tel }}
                 </div>
                 <div class="van-address-item__address">
                   {{ warehouseForm.province }}{{ warehouseForm.city
-                  }}{{ warehouseForm.area }}{{ warehouseForm.address }}({{
+                  }}{{ warehouseForm.district }}{{ warehouseForm.address }}({{
                     warehouseForm.id
                   }})
                 </div>
@@ -80,7 +80,7 @@
           </van-row>
           <van-row>
             <span class="title">注意:</span>
-            <span class="note">提交包裹后注意去国内包裹添加物流信息</span>
+            <span class="note">提交包裹后注意去添加物流信息</span>
           </van-row>
         </div>
         <div style="margin: 16px">
@@ -118,11 +118,7 @@ import {
   Popup,
 } from "vant";
 import chooseProductTypePop from "./components/chooseProductTypePop";
-// import {
-//   findSupplierByDistributorApi,
-//   addByDistributorApi,
-//   changeByUserApi,
-// } from "@/api/index";
+import { findTbWarehouseApi } from "@/api/index";
 export default {
   name: "package",
   components: {
@@ -140,14 +136,10 @@ export default {
   data() {
     return {
       showProductType: false, //默认
-      teamName: "",
-      warehouseForm: {
-        receiver: "俊哥",
-        customerName: "小明",
-        mobile: "12356788",
-        province: "湖北省武汉市洪山区光谷大道光谷总部时代广场",
-        id: "1322",
-      }, //仓库地址
+      actionType: "add", //默认
+      warehouseForm: {}, //仓库地址
+      groupName: "",
+      groupId: "",
       headTitle: "预报订单",
       form: {
         name: "",
@@ -157,13 +149,41 @@ export default {
     };
   },
   created() {
-    this.teamName = this.$route.query.teamName
-      ? this.$route.query.teamName
+    this.groupName = this.$route.query.groupName
+      ? this.$route.query.groupName
       : "";
+    this.actionType = this.$route.query.actionType;
+    if (this.actionType == "edit") {
+      this.headTitle = "修改预报订单";
+      this.form = JSON.parse(this.$route.query.row);
+      this.initAddressData(this.form.addressId);
+    } else {
+      this.initData();
+    }
   },
   methods: {
     onClickLeft() {
       this.$router.go(-1);
+    },
+
+    //初始化获取仓库地址列表
+    async initData() {
+      let res = await findTbWarehouseApi();
+      if (res && res.ack == 200 && res.data.length > 0) {
+        this.warehouseForm = res.data[0]; //默认仓库
+        this.form.addressId = this.warehouseForm.id;
+      }
+    },
+
+    //编辑的时候初始化地址
+    async initAddressData(id) {
+      let res = await findTbWarehouseApi();
+      if (res && res.ack == 200 && res.data.length > 0) {
+        let list = res.data;
+        this.warehouseForm = list.filter((item) => {
+          return item.id == id;
+        })[0];
+      }
     },
     closeProductTypePop() {
       this.showProductType = false;

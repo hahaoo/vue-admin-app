@@ -9,7 +9,7 @@
         </van-swipe>
       </div>
       <div class="section-one">
-        <van-grid :column-num="5" clickable class="grid">
+        <van-grid :column-num="5" :border="false" clickable class="grid">
           <van-grid-item
             v-for="(item, index) in gridList"
             :key="index"
