@@ -11,11 +11,11 @@ import { Loading } from "vant";
 import { loginApi } from "@/api/login.js";
 export default {
   components: {
-    [Loading.name]: Loading
+    [Loading.name]: Loading,
   },
   data() {
     return {
-      isWxClientEvn: true
+      isWxClientEvn: true,
     };
   },
   created() {
@@ -67,13 +67,13 @@ export default {
       }
     },
     redirectLogin() {
-            let severname =
-            window.location.protocol +
-            "//" +
-            window.location.hostname +
-            (window.location.port ? ":" + window.location.port : "");
-            let redirectUrl = severname + "/login"
-            window.location.href = `${severname}/wechat/oAuth2Api/auth?redirectUrl=${redirectUrl}`;
+      let severname =
+        window.location.protocol +
+        "//" +
+        window.location.hostname +
+        (window.location.port ? ":" + window.location.port : "");
+      let redirectUrl = severname + "/login";
+      window.location.href = `${severname}/wechat/oAuth2Api/auth?redirectUrl=${redirectUrl}`;
     },
     isWxClient() {
       var ua = navigator.userAgent.toLowerCase();
@@ -81,8 +81,8 @@ export default {
         return true;
       }
       return false;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -10,7 +10,7 @@ export default new Vuex.Store({
       apiUserToken: "e236ff0c44c59263ffc4f73010431d6f",
       apiUserId: "19494",
       nickName: "风轻云淡@1111#~",
-      apiSubUserId: "0"
+      apiSubUserId: "0",
     },
     //客户海外地址选择
     customerCurrentAddress: {},
@@ -22,12 +22,12 @@ export default new Vuex.Store({
     },
     //全局loading
     updateLoadingStatus(state, isLoading) {
-      state.isLoading = isLoading
+      state.isLoading = isLoading;
     },
     setCustomerCurrentAddress(state, payload) {
       state.customerCurrentAddress = payload.data;
-    }
+    },
   },
   actions: {},
-  modules: {}
+  modules: {},
 });
