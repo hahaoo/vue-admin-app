@@ -109,7 +109,18 @@ export default {
       imgUrl: "",
       images: [],
       checkedResults: [], //选中的
-      list: [],
+      list: [
+        {
+          status: "1",
+          trackNumber: 111,
+          packageRemark: "111",
+          remark: "ceshi",
+          weight: 0,
+          long: 0,
+          width: 0,
+          height: 0,
+        },
+      ],
       searchParam: {
         status: 2,
         page: 1,
@@ -162,9 +173,9 @@ export default {
       //     this.finished = true;
       //   }
       // } else {
-      //   this.finished = true;
+      this.finished = true;
       // }
-      // this.loading = false;
+      this.loading = false;
     },
     onLoad() {
       this.loading = true;

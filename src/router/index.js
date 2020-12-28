@@ -11,7 +11,6 @@ import pinyouDetail from "../views/pinyouDetail.vue"; //拼邮详情
 
 import userCenter from "../views/userCenter.vue";
 import orderManage from "../views/orderManage.vue";
-import packageApply from "../views/packageApply.vue";
 import warehouse from "../views/warehouse.vue";
 import addressManage from "../views/addressManage.vue";
 import addressDetail from "../views/addressDetail.vue";
@@ -68,28 +67,15 @@ const routes = [
   {
     path: "/orderManage",
     name: "orderManage",
-    meta: {
-      loginRequired: false,
-    },
     component: orderManage,
   },
 
   {
     path: "/userCenter",
     name: "userCenter",
-    meta: {
-      loginRequired: false,
-    },
     component: userCenter,
   },
-  {
-    path: "/packageApply",
-    name: "packageApply",
-    meta: {
-      loginRequired: false,
-    },
-    component: packageApply,
-  },
+
   {
     path: "/warehouse",
     name: "warehouse",

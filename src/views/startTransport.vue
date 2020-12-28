@@ -1,4 +1,5 @@
 <template>
+  <!-- 修改预报物流，添加拼邮包裹，添加预报订单 -->
   <div class="transport-wrap">
     <div class="header">
       <van-nav-bar :title="headTitle" left-arrow @click-left="onClickLeft" />
@@ -6,11 +7,6 @@
     <div class="content">
       <div class="pinyou-team-box" v-if="groupName">{{ groupName }}</div>
       <van-form @submit="onSubmit" class="form">
-        <van-field
-          v-model="form.name"
-          label="商品备注"
-          placeholder="请输入商品备注"
-        />
         <van-field
           required
           readonly
@@ -20,11 +16,7 @@
           placeholder="点击选择"
           @click="showProductType = true"
         />
-        <van-field name="stepper" label="商品数量">
-          <template #input>
-            <van-stepper v-model="form.number" />
-          </template>
-        </van-field>
+
         <van-field
           required
           v-model="form.trackNumber"
@@ -68,8 +60,8 @@
             <span class="note">
               详见
               <a style="color: #1096f0" @click="goToPostLimit()"
-                >《邮寄限制》</a
-              >
+                >《邮寄限制》
+              </a>
             </span>
           </van-row>
           <van-row>
@@ -106,17 +98,7 @@
 
 <script>
 // @ is an alias to /src
-import {
-  NavBar,
-  Form,
-  Stepper,
-  Field,
-  Button,
-  Col,
-  Row,
-  Cell,
-  Popup,
-} from "vant";
+import { NavBar, Form, Field, Button, Col, Row, Cell, Popup } from "vant";
 import chooseProductTypePop from "./components/chooseProductTypePop";
 import { findTbWarehouseApi } from "@/api/index";
 export default {
@@ -125,7 +107,6 @@ export default {
     chooseProductTypePop,
     [NavBar.name]: NavBar,
     [Form.name]: Form,
-    [Stepper.name]: Stepper,
     [Field.name]: Field,
     [Button.name]: Button,
     [Col.name]: Col,
@@ -136,30 +117,25 @@ export default {
   data() {
     return {
       showProductType: false, //默认
-      actionType: "add", //默认
       warehouseForm: {}, //仓库地址
       groupName: "",
       groupId: "",
       headTitle: "预报订单",
       form: {
-        name: "",
         number: "",
         addressId: "",
       },
     };
   },
   created() {
-    this.groupName = this.$route.query.groupName
-      ? this.$route.query.groupName
-      : "";
-    this.actionType = this.$route.query.actionType;
-    if (this.actionType == "edit") {
-      this.headTitle = "修改预报订单";
-      this.form = JSON.parse(this.$route.query.row);
-      this.initAddressData(this.form.addressId);
-    } else {
-      this.initData();
+    this.groupId = this.$route.query.groupId ? this.$route.query.groupId : "";
+    if (this.groupId) {
+      //添加拼邮包裹
+      this.headTitle = "添加拼邮包裹";
+      this.groupName = this.$route.query.groupName;
     }
+    //初始化仓库地址
+    this.initData();
   },
   methods: {
     onClickLeft() {
@@ -175,16 +151,6 @@ export default {
       }
     },
 
-    //编辑的时候初始化地址
-    async initAddressData(id) {
-      let res = await findTbWarehouseApi();
-      if (res && res.ack == 200 && res.data.length > 0) {
-        let list = res.data;
-        this.warehouseForm = list.filter((item) => {
-          return item.id == id;
-        })[0];
-      }
-    },
     closeProductTypePop() {
       this.showProductType = false;
     },
@@ -195,6 +161,9 @@ export default {
     onChangeWarehouse() {
       this.$router.push("/warehouse");
     },
+    //添加拼邮包裹
+
+    //添加新的预报订单
     onSubmit() {},
   },
 };

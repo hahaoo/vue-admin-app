@@ -21,8 +21,14 @@
           clickable
           @click="onChooseCountry()"
           v-model="tempCountryName"
-          required
-          :rules="[{ required: true, message: '请选择目的地国家' }]"
+        />
+        <van-field
+          readonly
+          clickable
+          :value="form.type"
+          label="申报类型"
+          placeholder="点击选择"
+          @click="showProductType = true"
         />
         <van-field
           label="包裹重量:"
@@ -31,12 +37,21 @@
           placeholder="请填写包裹重量（kg）"
           v-model="form.weight"
         />
-        <van-field
-          label="体积:"
-          label-width="80px"
-          v-model="form.voloum"
-          placeholder="请填写长宽高（cm），用逗号隔开"
-        ></van-field>
+        <van-field name="stepper" label-width="80px" label="体积:">
+          <template #input>
+            <div>
+              长：
+              <van-stepper
+                v-model="form.voloum"
+                step="0.2"
+                :decimal-length="2"
+                input-width="50px"
+                button-size="30px"
+              />
+            </div>
+          </template>
+        </van-field>
+
         <div class="note-box">
           <p class="red">温馨提示：</p>
           <p class="red">
@@ -82,7 +97,16 @@
         @cancel="onCancel"
       />
     </van-popup>
-
+    <!-- 申报类型展示 -->
+    <van-popup
+      v-model="showProductType"
+      position="right"
+      :style="{ height: '100%', width: '100%', background: '#f2f2f2' }"
+    >
+      <chooseProductTypePop
+        @closeProductTypePop="closeProductTypePop"
+      ></chooseProductTypePop>
+    </van-popup>
     <van-popup
       v-model="showFeeList"
       :style="{ height: '100%', width: '100%' }"
@@ -133,7 +157,8 @@
   </div>
 </template>
 <script>
-import { getCountrysApi, getShippingFeeByWeight } from "@/api/index";
+import chooseProductTypePop from "./components/chooseProductTypePop";
+import { getCountrysApi } from "@/api/index";
 import {
   NavBar,
   Form,
@@ -145,9 +170,11 @@ import {
   Row,
   Cell,
   CellGroup,
+  Stepper,
 } from "vant";
 export default {
   components: {
+    chooseProductTypePop,
     [NavBar.name]: NavBar,
     [Button.name]: Button,
     [Field.name]: Field,
@@ -158,11 +185,12 @@ export default {
     [Row.name]: Row,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
+    [Stepper.name]: Stepper,
   },
   data() {
     return {
       headTitle: "运费估算",
-      tempCountryName: "",
+      tempCountryName: "测试",
       countryList: [],
       isDefault: false, //
       form: {
@@ -171,9 +199,21 @@ export default {
         weight: "",
         voloum: "",
       },
+      showProductType: false, //默认
       show: false, //国家的选择
       showFeeList: false, // 查询结果
-      feeList: [],
+      feeList: [
+        {
+          tempCountryName: "测试",
+          shippingFee: "100",
+          logistics: "测试渠道",
+        },
+        {
+          tempCountryName: "测试",
+          shippingFee: "100",
+          logistics: "测试渠道",
+        },
+      ],
     };
   },
   created() {
@@ -220,26 +260,30 @@ export default {
     },
     async onSubmit() {
       console.log(this.form);
-      var volumeArr = (this.form.voloum &&
-        this.form.voloum.split(/,|，/gi)) || [0, 0, 0];
-      var sendData = {
-        countryCode: this.form.countryCode,
-        weight: 1000 * Number(this.form.weight),
-        long: Number(volumeArr[0]),
-        width: Number(volumeArr[1]),
-        height: Number(volumeArr[2]),
-      };
-      let res = await getShippingFeeByWeight(sendData);
-      if (res && res.ErrorCode == "9999") {
-        this.showFeeList = true;
-        this.feeList = res.Data.Results;
-      }
+      this.showFeeList = true;
+      // var volumeArr = (this.form.voloum &&
+      //   this.form.voloum.split(/,|，/gi)) || [0, 0, 0];
+      // var sendData = {
+      //   countryCode: this.form.countryCode,
+      //   weight: 1000 * Number(this.form.weight),
+      //   long: Number(volumeArr[0]),
+      //   width: Number(volumeArr[1]),
+      //   height: Number(volumeArr[2]),
+      // };
+      // let res = await getShippingFeeByWeight(sendData);
+      // if (res && res.ErrorCode == "9999") {
+      //   this.showFeeList = true;
+      //   this.feeList = res.Data.Results;
+      // }
     },
     onClosePop() {
       this.showFeeList = false;
     },
+    closeProductTypePop() {
+      this.showProductType = false;
+    },
     goToApply() {
-      this.$router.push("/packageApply");
+      this.$router.push("/startTransport");
     },
   },
 };

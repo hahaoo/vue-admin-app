@@ -49,49 +49,49 @@ export default {
     return {
       normalTypeList: [
         {
-          id: "0",
+          id: "1",
           name: "普货",
           imgSrc: "./icon/otherIcon.png",
         },
       ],
       typeList: [
         {
-          id: "1",
+          id: "2",
           name: "仿牌",
           imgSrc: "./icon/bagIcon.png",
         },
         {
-          id: "2",
+          id: "3",
           name: "带电产品",
           imgSrc: "./icon/eletricIcon.png",
         },
         {
-          id: "3",
+          id: "4",
           name: "生活电器",
           imgSrc: "./icon/homeApplicationIcon.png",
         },
         {
-          id: "4",
+          id: "5",
           name: "化妆品",
           imgSrc: "./icon/makeupIcon.png",
         },
         {
-          id: "5",
+          id: "6",
           name: "欧美品牌",
           imgSrc: "./icon/bandIcon.png",
         },
         {
-          id: "6",
+          id: "7",
           name: "粉末",
           imgSrc: "./icon/dustIcon.png",
         },
         {
-          id: "7",
+          id: "8",
           name: "食品",
           imgSrc: "./icon/foodIcon.png",
         },
         {
-          id: "8",
+          id: "9",
           name: "液体",
           imgSrc: "./icon/liquidIcon.png",
         },

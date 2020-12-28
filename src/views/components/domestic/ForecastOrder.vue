@@ -30,17 +30,6 @@
                 <van-button
                   round
                   size="small"
-                  type="info"
-                  plain
-                  @click="onChangeLogistic(item)"
-                  >修改物流</van-button
-                >
-                <!-- <van-button round size="small" type="info" plain
-                  >物流跟踪</van-button
-                > -->
-                <van-button
-                  round
-                  size="small"
                   type="danger"
                   plain
                   @click="onDelete(item.id)"
@@ -57,7 +46,7 @@
 
 <script>
 // @ is an alias to /src
-// import { findByDistributorApi, cancelByDistributorApi } from "@/api/index";
+// import { findGroupOrderApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -67,6 +56,7 @@ import {
   Card,
   Tag,
   Button,
+  Toast,
 } from "vant";
 export default {
   name: "home",
@@ -79,17 +69,24 @@ export default {
     [Card.name]: Card,
     [Tag.name]: Tag,
     [Button.name]: Button,
+    [Toast.name]: Toast,
   },
   data() {
     return {
-      list: [],
+      list: [
+        {
+          status: "1",
+          trackNumber: 111,
+          packageRemark: 111,
+          remark: "ceshi",
+        },
+      ],
       loading: false,
       finished: false,
       refreshing: false,
       searchParam: {
-        status: 1,
-        page: 1,
-        rowsPerPage: 10,
+        pageSize: 10,
+        currentPage: 1,
       },
       pageNum: 0, //分页
     };
@@ -116,18 +113,26 @@ export default {
     },
     //获取数据
     async getList(pageNum) {
-      // this.searchParam.page = pageNum;
-      // let res = await findByDistributorApi(this.searchParam);
-      // if (res.ErrorCode == "9999" && res.Data.Results.length > 0) {
-      //   var data = res.Data.Results;
-      //   this.list = this.list.concat(data);
-      //   if (this.list.length >= res.Data.Pagination.totalCount) {
+      // this.searchParam.currentPage = pageNum;
+      // let res = await findGroupOrderApi(this.searchParam);
+      // if (res && res.ack == "200" && res.data.length > 0) {
+      //   console.log(res);
+      //   var data = res.data;
+      //   for (var i = 0; i < data.length; i++) {
+      //     data[i].rate = (
+      //       (data[i].signWeight * 100) /
+      //       data[i].maxWeight
+      //     ).toFixed(2);
+      //     this.list.push(data[i]);
+      //   }
+      //   if (this.list.length >= res.total) {
       //     this.finished = true;
       //   }
       // } else {
-      //   this.finished = true;
+      //   Toast.fail(res.msg);
+      this.finished = true;
       // }
-      // this.loading = false;
+      this.loading = false;
     },
     onLoad() {
       this.loading = true;
@@ -141,22 +146,7 @@ export default {
       this.onLoad(); // 重新加载数据
       this.refreshing = false;
     },
-    onChangeLogistic(item) {
-      let data = {
-        id: item.id,
-        addressId: item.addressId,
-        packageRemark: item.packageRemark,
-        trackNumber: item.trackNumber,
-      };
-      var row = JSON.stringify(data);
-      this.$router.push({
-        path: "/packageApply",
-        query: {
-          actionType: "edit",
-          row: row,
-        },
-      });
-    },
+
     async onDelete(id) {
       let res = await cancelByDistributorApi({ id: id });
       if (res.ErrorCode == "9999" && res.Data.Results) {

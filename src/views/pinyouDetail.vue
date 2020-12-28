@@ -29,7 +29,7 @@
         <van-grid column-num="1" clickable>
           <van-grid-item to="/warehouse">
             <div class="address">
-              收货仓库1：{{ warehouseAddress }}
+              收货仓库：{{ warehouseAddress }}
               <van-icon name="arrow" />
             </div>
           </van-grid-item>
