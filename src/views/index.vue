@@ -9,7 +9,7 @@
         </van-swipe>
       </div>
       <div class="section-one">
-        <van-grid :column-num="5" clickable class="grid">
+        <van-grid :column-num="5" :border="false" clickable class="grid">
           <van-grid-item
             v-for="(item, index) in gridList"
             :key="index"
@@ -54,7 +54,7 @@
             </div>
             <div class="bottom">
               <van-button type="primary" @click="goToPinyou()"
-                >开始拼邮</van-button
+                >马上拼邮</van-button
               >
             </div>
           </van-grid-item>

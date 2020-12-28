@@ -9,15 +9,17 @@
       >
         <div class="pinyou-card" v-for="(item, index) in list" :key="index">
           <van-cell-group>
-            <van-cell :title="item.name" class="card-title" />
+            <van-cell :title="item.groupName" class="card-title" />
             <van-cell class="card-progress">
               <template #title>
                 <van-progress
-                  :percentage="30"
+                  :percentage="item.rate"
                   stroke-width="10"
                   color="#1287ff"
                 />
-                <div class="progress-tips">50% of 20kg</div>
+                <div class="progress-tips">
+                  {{ item.signWeight }} of {{ item.maxWeight }} kg
+                </div>
               </template>
             </van-cell>
             <van-cell>
@@ -25,18 +27,20 @@
                 <van-row class="card-bottom">
                   <van-col span="18" class="left">
                     <div class="tip1">
-                      <span class="money">￥200.00</span>
-                      <span class="kg">每100g(0.1kg)</span>
+                      <span class="money">￥{{ item.price }}</span>
+                      <span class="kg">{{ item.priceDesc }}</span>
                     </div>
                     <div class="address">
-                      <van-icon name="location-o" />湖北武汉
+                      <van-icon name="location-o" />{{ item.country }}
+                      {{ item.province
+                      }}{{ item.city == item.province ? "" : item.city }}
                     </div>
                   </van-col>
                   <van-col span="6" class="right">
                     <van-button
                       type="info"
                       size="small"
-                      @click="gotoTransport(item.name)"
+                      @click="gotoTransport(item)"
                       >立即加入</van-button
                     >
                   </van-col>
@@ -51,6 +55,7 @@
 </template>
 
 <script>
+import { findGroupOrderApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -62,6 +67,7 @@ import {
   Col,
   Row,
   Icon,
+  Toast,
 } from "vant";
 export default {
   name: "PinyouList",
@@ -76,6 +82,7 @@ export default {
     [Col.name]: Col,
     [Row.name]: Row,
     [Icon.name]: Icon,
+    [Toast.name]: Toast,
   },
 
   data() {
@@ -85,9 +92,8 @@ export default {
       finished: false,
       refreshing: false,
       searchParam: {
-        status: 1,
-        page: 1,
-        rowsPerPage: 10,
+        pageSize: 10,
+        currentPage: 1,
       },
       pageNum: 0, //分页
     };
@@ -96,25 +102,26 @@ export default {
   methods: {
     //获取数据
     async getList(pageNum) {
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = [];
-          this.refreshing = false;
+      this.searchParam.currentPage = pageNum;
+      let res = await findGroupOrderApi(this.searchParam);
+      if (res && res.ack == "200" && res.data.length > 0) {
+        console.log(res);
+        var data = res.data;
+        for (var i = 0; i < data.length; i++) {
+          data[i].rate = (
+            (data[i].signWeight * 100) /
+            data[i].maxWeight
+          ).toFixed(2);
+          this.list.push(data[i]);
         }
-
-        for (let i = 0; i < 5; i++) {
-          let item = {
-            name:
-              "测试美国拼友团1111华盛顿测试美国拼友团1111华盛顿测试美国拼友团1111华盛顿",
-          };
-          this.list.push(item);
-        }
-        this.loading = false;
-
-        if (this.list.length >= 10) {
+        if (this.list.length >= res.total) {
           this.finished = true;
         }
-      }, 1000);
+      } else {
+        Toast.fail(res.msg);
+        this.finished = true;
+      }
+      this.loading = false;
     },
     onLoad() {
       this.loading = true;
@@ -130,9 +137,10 @@ export default {
     },
     gotoTransport(data) {
       this.$router.push({
-        path: "/startTransport",
+        path: "/pinyouDetail",
         query: {
-          teamName: data,
+          groupName: data.groupName,
+          groupId: data.id,
         },
       });
     },

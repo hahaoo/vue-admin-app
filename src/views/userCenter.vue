@@ -180,7 +180,7 @@ export default {
     };
   },
   created() {
-    this.nickName = this.$store.state.authenticationData.nickName;
+    // this.nickName = this.$store.state.authenticationData.nickName;
   },
 };
 </script>

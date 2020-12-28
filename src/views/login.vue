@@ -20,52 +20,17 @@ export default {
   },
   created() {
     //调试代码
-    // this.executeLogin();
-    var iswx = this.isWxClient();
-    if (iswx) {
-      this.executeLogin();
-    } else {
-      this.redirectLogin();
-    }
+    this.executeLogin();
   },
   methods: {
-    getParameters() {
-      var url = window.location.href;
-      // console.log("obj------", obj);
-      // alert(JSON.stringify(url));
-      if (url == "") {
-        return null;
-      }
-      url = decodeURIComponent(url);
-      url = url.substring(1);
-      var str = url.replace(/&/g, "','");
-      str = str.replace(/=/g, "':'");
-      str = "({'" + str + "'})";
-      var obj = eval(str);
-      console.log("obj------", obj);
-      return obj;
-    },
     async executeLogin() {
-      //alert("executeLogin.....");
-      var openid = this.getParameters()["openid"];
-      if (openid) {
-        let data = { openId: this.getParameters()["openid"] };
-        let res2 = await loginApi(data);
-        if (res2.flag) {
-          // alert("----------:"+res2.flag);
-          var successUrl = "/";
-          if (localStorage.getItem("successUrl")) {
-            successUrl = localStorage.getItem("successUrl");
-            localStorage.removeItem("successUrl");
-          }
-          // alert("successUrl:"+successUrl);
-          window.history.replaceState({}, "", successUrl);
-          window.location.href = successUrl;
-        }
-      } else {
-        this.redirectLogin();
+      let res = await loginApi();
+      if (res.ack == "200") {
+        store.commit("setAuthToken", res.data.token);
+        store.commit("setEmployeeData", res.data.employee);
       }
     },
+<<<<<<< HEAD
     redirectLogin() {
       let severname =
         window.location.protocol +
@@ -82,6 +47,8 @@ export default {
       }
       return false;
     },
+=======
+>>>>>>> 2013f209d85883c1b45b6059b28b23650d841224
   },
 };
 </script>

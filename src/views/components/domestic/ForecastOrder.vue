@@ -57,7 +57,7 @@
 
 <script>
 // @ is an alias to /src
-import { findByDistributorApi, cancelByDistributorApi } from "@/api/index";
+// import { findByDistributorApi, cancelByDistributorApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -66,7 +66,7 @@ import {
   Panel,
   Card,
   Tag,
-  Button
+  Button,
 } from "vant";
 export default {
   name: "home",
@@ -78,7 +78,7 @@ export default {
     [Panel.name]: Panel,
     [Card.name]: Card,
     [Tag.name]: Tag,
-    [Button.name]: Button
+    [Button.name]: Button,
   },
   data() {
     return {
@@ -89,9 +89,9 @@ export default {
       searchParam: {
         status: 1,
         page: 1,
-        rowsPerPage: 10
+        rowsPerPage: 10,
       },
-      pageNum: 0 //分页
+      pageNum: 0, //分页
     };
   },
   created() {
@@ -116,19 +116,18 @@ export default {
     },
     //获取数据
     async getList(pageNum) {
-      this.searchParam.page = pageNum;
-      let res = await findByDistributorApi(this.searchParam);
-      if (res.ErrorCode == "9999" && res.Data.Results.length > 0) {
-        var data = res.Data.Results;
-        this.list = this.list.concat(data);
-        if (this.list.length >= res.Data.Pagination.totalCount) {
-          this.finished = true;
-        }
-      } else {
-        this.finished = true;
-      }
-      this.loading = false;
-      console.log("000");
+      // this.searchParam.page = pageNum;
+      // let res = await findByDistributorApi(this.searchParam);
+      // if (res.ErrorCode == "9999" && res.Data.Results.length > 0) {
+      //   var data = res.Data.Results;
+      //   this.list = this.list.concat(data);
+      //   if (this.list.length >= res.Data.Pagination.totalCount) {
+      //     this.finished = true;
+      //   }
+      // } else {
+      //   this.finished = true;
+      // }
+      // this.loading = false;
     },
     onLoad() {
       this.loading = true;
@@ -147,15 +146,15 @@ export default {
         id: item.id,
         addressId: item.addressId,
         packageRemark: item.packageRemark,
-        trackNumber: item.trackNumber
+        trackNumber: item.trackNumber,
       };
       var row = JSON.stringify(data);
       this.$router.push({
         path: "/packageApply",
         query: {
           actionType: "edit",
-          row: row
-        }
+          row: row,
+        },
       });
     },
     async onDelete(id) {
@@ -164,8 +163,8 @@ export default {
         this.$toast.success("删除成功");
         this.onRefresh();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less">

@@ -14,10 +14,10 @@
         @change="onClickTab"
       >
         <van-tab title="已预报" :name="1">
-          <order-list :status="active"></order-list>
+          <forecast-order></forecast-order>
         </van-tab>
         <van-tab title="已上架" :name="2">
-          <order-list :status="active"></order-list>
+          <on-shelf-order></on-shelf-order>
         </van-tab>
         <van-tab title="待打包" :name="3">
           <order-list :status="active"></order-list>
@@ -36,10 +36,14 @@
 <script>
 // @ is an alias to /src
 import { NavBar, Tab, Tabs } from "vant";
+import ForecastOrder from "./components/domestic/ForecastOrder.vue";
+import OnShelfOrder from "./components/domestic/OnShelfOrder";
 import OrderList from "./components/overSeas/OrderList.vue";
 export default {
   name: "overseas",
   components: {
+    ForecastOrder,
+    OnShelfOrder,
     OrderList,
     [NavBar.name]: NavBar,
     [Tab.name]: Tab,
