@@ -30,6 +30,25 @@ export default {
         store.commit("setEmployeeData", res.data.employee);
       }
     },
+<<<<<<< HEAD
+    redirectLogin() {
+      let severname =
+        window.location.protocol +
+        "//" +
+        window.location.hostname +
+        (window.location.port ? ":" + window.location.port : "");
+      let redirectUrl = severname + "/login";
+      window.location.href = `${severname}/wechat/oAuth2Api/auth?redirectUrl=${redirectUrl}`;
+    },
+    isWxClient() {
+      var ua = navigator.userAgent.toLowerCase();
+      if (ua.match(/MicroMessenger/i) == "micromessenger") {
+        return true;
+      }
+      return false;
+    },
+=======
+>>>>>>> 2013f209d85883c1b45b6059b28b23650d841224
   },
 };
 </script>
