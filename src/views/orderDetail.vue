@@ -90,7 +90,7 @@
             <van-cell>
               <template #title>
                 <span class="summary-title">
-                  <span style="display:inline-blocl;margin-right:10px;"
+                  <span style="display: inline-blocl; margin-right: 10px"
                     >实重：{{ item.weight }}(g)</span
                   >体积：{{ item.long }}*{{ item.width }}*{{ item.height }} cm³
                 </span>
@@ -118,14 +118,7 @@
 </template>
 <script>
 // @ is an alias to /src
-import {
-  NavBar,
-  Form,
-  Field,
-  Cell,
-  CellGroup,
-  Card
-} from "vant";
+import { NavBar, Form, Field, Cell, CellGroup, Card } from "vant";
 import { getTransportPackageDetail } from "@/api/index";
 export default {
   name: "postLimit",
@@ -141,11 +134,11 @@ export default {
     return {
       basicForm: {},
       addressForm: {},
-      packages: []
-    }
+      packages: [],
+    };
   },
   created() {
-    this.getDetail();
+    // this.getDetail();
   },
   methods: {
     onClickLeft() {
@@ -154,15 +147,14 @@ export default {
     async getDetail() {
       var id = this.$route.query.id;
       let res = await getTransportPackageDetail({ id: id });
-      if (res && res.ErrorCode == '9999') {
+      if (res && res.ErrorCode == "9999") {
         this.addressForm = JSON.parse(res.Data.Results.address);
         this.packages = res.Data.Results.packages;
         this.basicForm = res.Data.Results;
       }
-
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style lang="less">
 .order-detail {

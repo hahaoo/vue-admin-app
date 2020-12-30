@@ -84,7 +84,12 @@ export default {
     [Icon.name]: Icon,
     [Toast.name]: Toast,
   },
-
+  props: {
+    searchKey: {
+      type: String,
+      default: "",
+    }, //关键字搜索，城市
+  },
   data() {
     return {
       list: [], //数据
@@ -94,15 +99,20 @@ export default {
       searchParam: {
         pageSize: 10,
         currentPage: 1,
+        cityl: "", //城市模糊搜索
       },
       pageNum: 0, //分页
     };
   },
-  created() {},
+  created() {
+    console.log("searchKey", this.searchKey);
+    this.searchParam.cityl = this.searchKey;
+  },
   methods: {
     //获取数据
     async getList(pageNum) {
       this.searchParam.currentPage = pageNum;
+      this.searchParam.cityl = this.searchKey;
       let res = await findGroupOrderApi(this.searchParam);
       if (res && res.ack == "200" && res.data.length > 0) {
         console.log(res);

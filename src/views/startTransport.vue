@@ -1,5 +1,5 @@
 <template>
-  <!-- 修改预报物流，添加拼邮包裹，添加预报订单 -->
+  <!-- 添加拼邮包裹，添加预报订单 -->
   <div class="transport-wrap">
     <div class="header">
       <van-nav-bar :title="headTitle" left-arrow @click-left="onClickLeft" />
@@ -11,20 +11,22 @@
           required
           readonly
           clickable
-          :value="form.type"
+          :value="goodsTypeName"
           label="申报类型"
           placeholder="点击选择"
           @click="showProductType = true"
+          :rules="[{ required: true, message: '请选择申报类型' }]"
         />
 
         <van-field
           required
-          v-model="form.trackNumber"
+          v-model="form.trackNo"
           label="快递单号"
           rows="3"
           autosize
           type="textarea"
           placeholder="可以填写多个快递单号，请用逗号,分号，空格，回车键隔开"
+          :rules="[{ required: true, message: '请填写快递单号' }]"
         >
         </van-field>
         <van-field
@@ -76,9 +78,9 @@
           </van-row>
         </div>
         <div style="margin: 16px">
-          <van-button round block type="info" native-type="submit"
-            >提交</van-button
-          >
+          <van-button round block type="info" native-type="submit">
+            提交
+          </van-button>
         </div>
       </van-form>
     </div>
@@ -91,6 +93,7 @@
     >
       <chooseProductTypePop
         @closeProductTypePop="closeProductTypePop"
+        @onChooseType="onChooseType"
       ></chooseProductTypePop>
     </van-popup>
   </div>
@@ -98,9 +101,23 @@
 
 <script>
 // @ is an alias to /src
-import { NavBar, Form, Field, Button, Col, Row, Cell, Popup } from "vant";
+import {
+  NavBar,
+  Form,
+  Field,
+  Button,
+  Col,
+  Row,
+  Cell,
+  Popup,
+  Toast,
+} from "vant";
 import chooseProductTypePop from "./components/chooseProductTypePop";
-import { findTbWarehouseApi } from "@/api/index";
+import {
+  findTbWarehouseApi,
+  addPackageCustomApi,
+  saveGroupDetailCustomApi,
+} from "@/api/index";
 export default {
   name: "package",
   components: {
@@ -113,6 +130,7 @@ export default {
     [Row.name]: Row,
     [Cell.name]: Cell,
     [Popup.name]: Popup,
+    [Toast.name]: Toast,
   },
   data() {
     return {
@@ -120,51 +138,132 @@ export default {
       warehouseForm: {}, //仓库地址
       groupName: "",
       groupId: "",
+      goodsTypeName: "",
       headTitle: "预报订单",
       form: {
-        number: "",
-        addressId: "",
+        customName: "",
+        customid: "",
+        goodsType: 1,
+        trackNo: "",
+        warehouseid: "",
+        remark: "",
       },
     };
   },
   created() {
+    this.form.customName = this.$store.state.employee.employeeName;
+    this.form.customid = this.$store.state.employee.id;
     this.groupId = this.$route.query.groupId ? this.$route.query.groupId : "";
     if (this.groupId) {
       //添加拼邮包裹
       this.headTitle = "添加拼邮包裹";
       this.groupName = this.$route.query.groupName;
+      this.form.warehouseid = Number(this.$route.query.warehouseid);
+      this.initPinyouAddress(this.form.warehouseid);
+    } else {
+      //初始化仓库地址
+      this.initAddress();
     }
-    //初始化仓库地址
-    this.initData();
   },
   methods: {
     onClickLeft() {
       this.$router.go(-1);
     },
-
     //初始化获取仓库地址列表
-    async initData() {
+    async initAddress() {
       let res = await findTbWarehouseApi();
       if (res && res.ack == 200 && res.data.length > 0) {
-        this.warehouseForm = res.data[0]; //默认仓库
-        this.form.addressId = this.warehouseForm.id;
+        this.warehouseForm = res.data[0]; //默认仓库第一个
+        this.form.warehouseid = this.warehouseForm.id;
+      } else {
+        Toast.fail(res.msg);
       }
     },
 
+    //拼邮过来的时候，根据warehouseid 初始化仓库地址
+    async initPinyouAddress(id) {
+      let res = await findTbWarehouseApi();
+      if (res && res.ack == 200 && res.data.length > 0) {
+        this.warehouseForm = res.data.filter((item) => {
+          return item.id == id;
+        })[0];
+      } else {
+        Toast.fail(res.msg);
+      }
+    },
+    //选择申报类型
     closeProductTypePop() {
       this.showProductType = false;
     },
+    onChooseType(item) {
+      console.log(item);
+      this.showProductType = false;
+      this.form.goodsType = Number(item.id);
+      this.goodsTypeName = item.name;
+    },
+    //去邮寄限制页面
     goToPostLimit() {
       this.$router.push("/postLimit");
     },
-    //更换仓库地址
+    //更换仓库地址,暂时只有一个仓库
     onChangeWarehouse() {
       this.$router.push("/warehouse");
     },
-    //添加拼邮包裹
-
-    //添加新的预报订单
-    onSubmit() {},
+    //添加拼邮包裹接口
+    async saveGroupDetailCustom() {
+      var sendData = {
+        customName: this.form.customName,
+        customid: this.form.customid,
+        warehouseid: this.form.warehouseid,
+        packageList: [
+          {
+            goodsType: this.form.goodsType,
+            remark: this.form.remark,
+            trackNo: this.form.trackNo,
+          },
+        ],
+      };
+      let res = await saveGroupDetailCustomApi(sendData);
+      if (res && res.ack == 200) {
+        this.$router.push({
+          path: "/orderManage",
+          query: {
+            status: "1",
+          },
+        });
+        Toast.success(res.msg);
+      } else {
+        Toast.fail(res.msg);
+      }
+    },
+    //添加新的预报订单接口
+    async addPackageCustom() {
+      let res = await addPackageCustomApi(this.form);
+      if (res && res.ack == 200) {
+        this.$router.push({
+          path: "/orderManage",
+          query: {
+            status: "1",
+          },
+        });
+        Toast.success(res.msg);
+      } else {
+        Toast.fail(res.msg);
+      }
+    },
+    //提交
+    onSubmit(values) {
+      console.log(this.form);
+      // let trackNos =
+      //   (this.form.trackNo &&
+      //     this.form.trackNo.split(/,|，|\s |\r | ；|;/gi)) ||
+      //   [];
+      if (this.groupId) {
+        this.saveGroupDetailCustom();
+      } else {
+        this.addPackageCustom();
+      }
+    },
   },
 };
 </script>

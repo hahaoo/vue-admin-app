@@ -24,6 +24,7 @@ Axios.interceptors.request.use(
       config.headers.common["token"] = store.state.token;
     }
     config.headers.common["lang"] = "zh_CN";
+    
     let data = Object.assign(
       {},
       { companyid: store.state.employee.companyid },

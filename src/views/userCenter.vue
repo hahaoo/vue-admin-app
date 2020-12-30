@@ -59,35 +59,6 @@
         </div>
       </div>
       <div class="order-info">
-        <!-- <div class="grid-panel">
-          <van-cell title="国内包裹" class="title" is-link to="/domesticOrder"></van-cell>
-          <van-grid clickable :column-num="4" class="grid" :border="false">
-            <van-grid-item to="/domesticOrder?status=1">
-              <template #text>
-                <div class="text">已预报</div>
-              </template>
-              <template #icon>
-                <div class="icon">
-                  <van-icon name="clock-o" />
-                </div>
-              </template>
-            </van-grid-item>
-            
-            <van-grid-item to="/domesticOrder?status=2">
-              <template #text>
-                <div class="text">已上架</div>
-              </template>
-              <template #icon>
-                <div class="icon">
-                  <van-icon name="certificate" />
-                </div>
-              </template>
-            </van-grid-item>
-            <van-grid-item to></van-grid-item>
-            <van-grid-item to></van-grid-item>
-          </van-grid>
-        </div>-->
-
         <div class="grid-panel">
           <van-cell
             title="我的订单"

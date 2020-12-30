@@ -192,6 +192,7 @@ export default {
         query: {
           groupName: this.groupName,
           groupId: this.groupId,
+          warehouseid: this.form.warehouseid,
         },
       });
     },

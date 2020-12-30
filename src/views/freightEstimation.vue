@@ -25,8 +25,9 @@
         <van-field
           readonly
           clickable
-          :value="form.type"
-          label="申报类型"
+          :value="goodsTypeName"
+          label="申报类型："
+          label-width="80px"
           placeholder="点击选择"
           @click="showProductType = true"
         />
@@ -40,14 +41,9 @@
         <van-field name="stepper" label-width="80px" label="体积:">
           <template #input>
             <div>
-              长：
-              <van-stepper
-                v-model="form.voloum"
-                step="0.2"
-                :decimal-length="2"
-                input-width="50px"
-                button-size="30px"
-              />
+              <van-field v-model="form.long" placeholder="长(cm)" />
+              <van-field v-model="form.width" placeholder="宽(cm)" />
+              <van-field v-model="form.height" placeholder="高(cm)" />
             </div>
           </template>
         </van-field>
@@ -105,6 +101,7 @@
     >
       <chooseProductTypePop
         @closeProductTypePop="closeProductTypePop"
+        @onChooseType="onChooseType"
       ></chooseProductTypePop>
     </van-popup>
     <van-popup
@@ -113,7 +110,7 @@
       get-container="#app"
     >
       <div class="header">
-        <van-nav-bar title="邮寄查询" left-arrow @click-left="onClosePop" />
+        <van-nav-bar title="渠道查询" left-arrow @click-left="onClosePop" />
       </div>
 
       <div class="result-content">
@@ -199,6 +196,7 @@ export default {
         weight: "",
         voloum: "",
       },
+      goodsTypeName: "",
       showProductType: false, //默认
       show: false, //国家的选择
       showFeeList: false, // 查询结果
@@ -281,6 +279,12 @@ export default {
     },
     closeProductTypePop() {
       this.showProductType = false;
+    },
+    onChooseType(item) {
+      console.log(item);
+      this.showProductType = false;
+      this.form.goodsType = Number(item.id);
+      this.goodsTypeName = item.name;
     },
     goToApply() {
       this.$router.push("/startTransport");

@@ -89,7 +89,7 @@
 import {
   findByDistributorAddressApi,
   findByDistributorShipApi,
-  transportByDistributorApi
+  transportByDistributorApi,
 } from "@/api/index";
 import {
   NavBar,
@@ -98,7 +98,7 @@ import {
   Button,
   Cell,
   CellGroup,
-  Field
+  Field,
 } from "vant";
 export default {
   name: "package",
@@ -109,7 +109,7 @@ export default {
     [Button.name]: Button,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
-    [Field.name]: Field
+    [Field.name]: Field,
   },
   data() {
     return {
@@ -124,10 +124,10 @@ export default {
         addressId: 0,
         shippingId: "",
         declareFee: "",
-        declareRemark: "" //申报内容
+        declareRemark: "", //申报内容
       },
       volumetricWeight: "", //体积重系数
-      logisticsList: []
+      logisticsList: [],
     };
   },
   created() {
@@ -137,7 +137,7 @@ export default {
     this.form.weight = this.$route.query.weight;
     this.form.ids = data.ids;
     this.form.volumeArr = data.volumeArr;
-    this.initData();
+    // this.initData();
     console.log("11", this.form.ids);
   },
   watch: {
@@ -152,7 +152,7 @@ export default {
         console.log(value);
         this.calVolume(value);
       }
-    }
+    },
   },
   methods: {
     onClickLeft() {
@@ -166,7 +166,7 @@ export default {
         let res = await findByDistributorAddressApi();
         if (res.ErrorCode == "9999") {
           this.addressList = res.Data.Results;
-          this.addressForm = this.addressList.filter(item => {
+          this.addressForm = this.addressList.filter((item) => {
             return item.isDefault == "1";
           })[0];
         }
@@ -176,7 +176,7 @@ export default {
     //根据地址查询物流渠道
     async getShipList() {
       let res1 = await findByDistributorShipApi({
-        countryCode: this.addressForm.countryCode
+        countryCode: this.addressForm.countryCode,
       });
       if (res1.ErrorCode == "9999") {
         this.logisticsList = res1.Data.Results;
@@ -184,7 +184,7 @@ export default {
     },
     //根据物流渠道计算体积重
     calVolume(value) {
-      let item = this.logisticsList.filter(item => {
+      let item = this.logisticsList.filter((item) => {
         return item.id == value;
       });
       // debugger;
@@ -201,16 +201,16 @@ export default {
         path: "/addressManage",
         query: {
           id: this.addressForm.id,
-          actionType: "select"
-        }
+          actionType: "select",
+        },
       });
     },
     onAdd() {
       this.$router.push({
         path: "/addressManage",
         query: {
-          actionType: "select"
-        }
+          actionType: "select",
+        },
       });
     },
     async onSubmit() {
@@ -219,7 +219,7 @@ export default {
         shippingId: this.form.shippingId,
         addressId: this.addressForm.id,
         declareFee: this.form.declareFee,
-        declareRemark: this.form.declareRemark
+        declareRemark: this.form.declareRemark,
       };
       if (sendData.addressId && sendData.shippingId) {
         console.log(sendData);
@@ -232,8 +232,8 @@ export default {
       } else {
         this.$notify("地址和物流渠道都必选");
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less">

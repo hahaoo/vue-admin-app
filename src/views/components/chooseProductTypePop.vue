@@ -9,6 +9,7 @@
           class="item"
           v-for="item in normalTypeList"
           :key="item.id"
+          @click="onChooseNormalType(item)"
         >
           <img :src="item.imgSrc" alt class="item-img" />
           <span class="item-text">{{ item.name }}</span>
@@ -29,7 +30,12 @@
       <div class="tips-title">以下类别要进行人工审核</div>
 
       <van-grid :column-num="2" direction="horizontal" :gutter="3">
-        <van-grid-item class="item" v-for="item in typeList" :key="item.id">
+        <van-grid-item
+          class="item"
+          v-for="item in typeList"
+          :key="item.id"
+          @click="onChooseSpecialType(item)"
+        >
           <img :src="item.imgSrc" alt class="item-img" />
           <span class="item-text">{{ item.name }}</span>
         </van-grid-item>
@@ -102,6 +108,12 @@ export default {
   methods: {
     onClickLeft() {
       this.$emit("closeProductTypePop");
+    },
+    onChooseNormalType(item) {
+      this.$emit("onChooseType", item);
+    },
+    onChooseSpecialType(item) {
+      this.$emit("onChooseType", item);
     },
   },
 };

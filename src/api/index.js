@@ -9,19 +9,13 @@ export const findGroupOrderApi = (data) =>
 export const findTbWarehouseApi = (data) =>
   http.Axios.post("/findTbWarehouse", data);
 
-//提交国内包裹预报接口
-export const addByDistributorApi = (data) =>
-  http.Axios.post("", {
-    api: "api.DistributorPackage.addByDistributor",
-    edatas: data,
-  });
+//转运提交预报订单
+export const addPackageCustomApi = (data) =>
+  http.Axios.post("/addPackageCustom", data);
 
-//修改物流 国内包裹预报接口
-export const changeByUserApi = (data) =>
-  http.Axios.post("", {
-    api: "api.DistributorPackage.changeByUser",
-    edatas: data,
-  });
+//拼邮提交包裹
+export const saveGroupDetailCustomApi = (data) =>
+  http.Axios.post("/saveGroupDetailCustom", data);
 
 //获取国内包裹列表接口
 export const findByDistributorApi = (data) =>
