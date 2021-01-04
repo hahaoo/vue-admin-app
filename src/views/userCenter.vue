@@ -67,7 +67,7 @@
             to="/orderManage"
           ></van-cell>
           <van-grid clickable :column-num="5" class="grid" :border="false">
-            <van-grid-item to="/orderManage?status=1">
+            <van-grid-item to="/orderManage?state=1">
               <template #text>
                 <div class="text">已预报</div>
               </template>
@@ -77,7 +77,7 @@
                 </div>
               </template>
             </van-grid-item>
-            <van-grid-item to="/orderManage?status=2">
+            <van-grid-item to="/orderManage?state=2">
               <template #text>
                 <div class="text">已上架</div>
               </template>
@@ -87,7 +87,7 @@
                 </div>
               </template>
             </van-grid-item>
-            <van-grid-item to="/orderManage?status=3">
+            <van-grid-item to="/orderManage?state=3">
               <template #text>
                 <div class="text">待打包</div>
               </template>
@@ -97,7 +97,7 @@
                 </div>
               </template>
             </van-grid-item>
-            <van-grid-item to="/orderManage?status=4">
+            <van-grid-item to="/orderManage?state=4">
               <template #text>
                 <div class="text">已出库</div>
               </template>
@@ -107,7 +107,7 @@
                 </div>
               </template>
             </van-grid-item>
-            <van-grid-item to="/orderManage?status=5">
+            <van-grid-item to="/orderManage?state=5">
               <template #text>
                 <div class="text">已发货</div>
               </template>

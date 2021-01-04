@@ -13,19 +13,17 @@
               <van-cell>
                 <template #title>
                   <span class="custom-title"
-                    >({{ parseInt(index) + 1 }}) 物流单号：{{
-                      item.trackNumber
-                    }}
+                    >({{ parseInt(index) + 1 }}) 物流单号：{{ item.trackNo }}
                   </span>
                 </template>
                 <template #right-icon>
                   <van-tag type="primary" size="medium" plain>{{
-                    formatStatus(item.status)
+                    formatStatus(item.state)
                   }}</van-tag>
                 </template>
               </van-cell>
             </van-cell-group>
-            <van-card :title="item.packageRemark" :desc="item.remark">
+            <van-card :title="item.logisticsName" :desc="item.remark">
               <template #footer>
                 <van-button
                   round
@@ -46,7 +44,7 @@
 
 <script>
 // @ is an alias to /src
-// import { findGroupOrderApi } from "@/api/index";
+import { findPackageCustomApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -59,7 +57,7 @@ import {
   Toast,
 } from "vant";
 export default {
-  name: "home",
+  name: "order",
   components: {
     [List.name]: List,
     [PullRefresh.name]: PullRefresh,
@@ -71,67 +69,59 @@ export default {
     [Button.name]: Button,
     [Toast.name]: Toast,
   },
+  props: ["state"],
   data() {
     return {
-      list: [
-        {
-          status: "1",
-          trackNumber: 111,
-          packageRemark: 111,
-          remark: "ceshi",
-        },
-      ],
+      list: [],
       loading: false,
       finished: false,
       refreshing: false,
       searchParam: {
+        customid: "",
         pageSize: 10,
         currentPage: 1,
+        state: 1,
       },
       pageNum: 0, //分页
     };
   },
-  created() {
-    // this.onLoad();
-  },
+  created() {},
   methods: {
-    formatStatus(status) {
-      switch (status) {
-        case "1":
+    formatStatus(state) {
+      switch (state) {
+        case 1:
           return "已申报未入库";
           break;
-        case "2":
+        case 2:
           return "已入库";
           break;
-        case "8":
+        case 4:
           return "有异常";
           break;
-        case "9":
+        case 5:
           return "已作废";
           break;
       }
     },
     //获取数据
     async getList(pageNum) {
-      // this.searchParam.currentPage = pageNum;
-      // let res = await findGroupOrderApi(this.searchParam);
-      // if (res && res.ack == "200" && res.data.length > 0) {
-      //   console.log(res);
-      //   var data = res.data;
-      //   for (var i = 0; i < data.length; i++) {
-      //     data[i].rate = (
-      //       (data[i].signWeight * 100) /
-      //       data[i].maxWeight
-      //     ).toFixed(2);
-      //     this.list.push(data[i]);
-      //   }
-      //   if (this.list.length >= res.total) {
-      //     this.finished = true;
-      //   }
-      // } else {
-      //   Toast.fail(res.msg);
-      this.finished = true;
-      // }
+      this.searchParam.customid = this.$store.state.employee.id;
+      this.searchParam.state = this.state;
+      this.searchParam.currentPage = pageNum;
+      let res = await findPackageCustomApi(this.searchParam);
+      if (res && res.ack == "200" && res.data.length > 0) {
+        console.log(res);
+        var data = res.data;
+        for (var i = 0; i < data.length; i++) {
+          this.list.push(data[i]);
+        }
+        if (this.list.length >= res.total) {
+          this.finished = true;
+        }
+      } else {
+        this.finished = true;
+        Toast.fail(res.msg);
+      }
       this.loading = false;
     },
     onLoad() {

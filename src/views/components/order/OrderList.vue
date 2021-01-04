@@ -13,29 +13,29 @@
               <van-cell>
                 <template #title>
                   <span class="custom-title"
-                    >({{ index + 1 }}) 订单号：{{ item.transCode }}</span
+                    >({{ index + 1 }}) 订单号：{{ item.deliverOrderid }}</span
                   >
                 </template>
                 <template #right-icon>
                   <van-tag type="primary" plain size="medium">{{
-                    formatStatus(item.status)
+                    formatStatus(item.state)
                   }}</van-tag>
                 </template>
               </van-cell>
             </van-cell-group>
             <van-card
-              :title="item.logistics"
+              :title="item.logisticsName"
               :num="item.num"
               currency
               :centered="true"
-              :desc="item.declareRemark"
-              :thumb="item.imgUrl ? item.imgUrl : '3.png'"
+              :desc="item.remark"
+              :thumb="item.pic ? item.pic : '3.png'"
               @click-thumb="onClickThumb(item)"
             >
               <template #footer>
                 <div class="summary-box">
-                  <span>共：100 元</span>
-                  <span>共：2 个包裹</span>
+                  <span>共：{{ item.price }} 元</span>
+                  <span>共：{{ item.num }} 个包裹</span>
                 </div>
                 <van-button
                   round
@@ -60,7 +60,7 @@
 
 <script>
 // @ is an alias to /src
-// import { findTransportByDistributorApi } from "@/api/index";
+import { findPackageCustomApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -85,7 +85,7 @@ export default {
     [Button.name]: Button,
     [ImagePreview.Component.name]: ImagePreview.Component,
   },
-  props: ["status"],
+  props: ["state"],
   data() {
     return {
       list: [],
@@ -93,62 +93,63 @@ export default {
       finished: false,
       refreshing: false,
       searchParam: {
-        status: 1,
-        page: 1,
-        rowsPerPage: 10,
+        customid: "",
+        pageSize: 10,
+        currentPage: 1,
+        state: 2,
       },
       pageNum: 0, //分页
     };
   },
   created() {
-    this.searchParam.status = this.status;
+    this.searchParam.state = this.state;
   },
   methods: {
-    formatStatus(status) {
-      switch (status) {
-        case "1":
-          return "未付款";
+    formatStatus(state) {
+      switch (state) {
+        case 1:
+          return "已申报未入库";
           break;
-        case "2":
-          return "已付款待打包";
+        case 2:
+          return "已入库";
           break;
-        case "3":
-          return "已打包";
-          break;
-        case "4":
+        case 3:
           return "已发货";
           break;
-        case "5":
-          return "已完成";
+        case 4:
+          return "有异常";
           break;
-        case "9":
+        case 5:
           return "已作废";
+          break;
+        case 6:
+          return "待打包";
+          break;
+        case 7:
+          return "已出库";
           break;
       }
     },
     //获取数据
     async getList(pageNum) {
-      this.searchParam.page = pageNum;
-      setTimeout(() => {
-        if (this.refreshing) {
-          this.list = [];
-          this.refreshing = false;
+      this.searchParam.customid = this.$store.state.employee.id;
+      this.searchParam.state = this.state;
+      this.searchParam.currentPage = pageNum;
+      let res = await findPackageCustomApi(this.searchParam);
+      if (res && res.ack == "200" && res.data.length > 0) {
+        console.log(res);
+        var data = res.data;
+        for (var i = 0; i < data.length; i++) {
+          this.list.push(data[i]);
         }
-
-        for (let i = 0; i < 5; i++) {
-          let item = {
-            status: "1",
-            transCode: "1122",
-            logistics: "测试111111",
-          };
-          this.list.push(item);
-        }
-        this.loading = false;
-
-        if (this.list.length >= 10) {
+        if (this.list.length >= res.total) {
           this.finished = true;
         }
-      }, 1000);
+      } else {
+        this.finished = true;
+        this.$toast.fail(res.msg);
+      }
+      this.loading = false;
     },
     onLoad() {
       this.loading = true;

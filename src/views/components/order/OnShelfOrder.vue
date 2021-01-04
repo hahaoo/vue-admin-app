@@ -20,23 +20,23 @@
                       ></van-checkbox>
                       <span class="custom-title"
                         >({{ parseInt(index) + 1 }}) 物流单号：{{
-                          item.trackNumber
+                          item.trackNo
                         }}
                       </span>
                     </div>
                   </template>
                   <template #right-icon>
                     <van-tag type="primary" size="medium" plain>
-                      {{ formatStatus(item.status) }}
+                      {{ formatStatus(item.state) }}
                     </van-tag>
                   </template>
                 </van-cell>
               </van-cell-group>
               <van-card
-                :title="item.packageRemark"
-                :desc="item.desc"
-                :price="item.remark"
-                :thumb="item.imgUrl ? item.imgUrl : '3.png'"
+                :title="item.logisticsName"
+                :desc="item.remark"
+                :price="item.type == 2 ? item.groupName : ''"
+                :thumb="item.pic ? item.pic : '3.png'"
                 currency=""
                 @click-thumb="onClickThumb(item)"
               >
@@ -45,10 +45,33 @@
                 <van-cell>
                   <template #title>
                     <span class="summary-title">
-                      实重：{{ item.weight }}(g) 体积：{{ item.long }}*{{
+                      实重：{{ item.weight }}(g) 体积：{{ item.length }}*{{
                         item.width
                       }}*{{ item.height }} cm³
                     </span>
+
+                    <van-button
+                      v-if="item.type == 1"
+                      plain
+                      round
+                      size="small"
+                      type="danger"
+                      class="right-botton"
+                      @click="removePinyou(item)"
+                    >
+                      移除拼邮
+                    </van-button>
+                    <van-button
+                      v-else
+                      plain
+                      round
+                      size="small"
+                      type="primary"
+                      class="right-botton"
+                      @click="goToPinyou(item)"
+                    >
+                      拼邮
+                    </van-button>
                   </template>
                 </van-cell>
               </van-cell-group>
@@ -71,7 +94,7 @@
 
 <script>
 // @ is an alias to /src
-// import { findByDistributorApi } from "@/api/index";
+import { findPackageCustomApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -104,27 +127,18 @@ export default {
     [Popup.name]: Popup,
     [ImagePreview.Component.name]: ImagePreview.Component,
   },
+  props: ["state"],
   data() {
     return {
       imgUrl: "",
       images: [],
       checkedResults: [], //选中的
-      list: [
-        {
-          status: "1",
-          trackNumber: 111,
-          packageRemark: "111",
-          remark: "ceshi",
-          weight: 0,
-          long: 0,
-          width: 0,
-          height: 0,
-        },
-      ],
+      list: [],
       searchParam: {
-        status: 2,
-        page: 1,
-        rowsPerPage: 10,
+        customid: "",
+        pageSize: 10,
+        currentPage: 1,
+        state: 2,
       },
       checked: false,
       loading: false,
@@ -133,7 +147,6 @@ export default {
       pageNum: 0, //分页
     };
   },
-  created() {},
   watch: {
     checkedResults(val) {
       if (val.length == this.list.length) {
@@ -143,40 +156,51 @@ export default {
       }
     },
   },
+  created() {
+    console.log(this.state);
+  },
   methods: {
-    formatStatus(status) {
-      switch (status) {
-        case "1":
+    formatStatus(state) {
+      switch (state) {
+        case 1:
           return "已申报未入库";
           break;
-        case "2":
+        case 2:
           return "已入库";
           break;
-        case "8":
+        case 4:
           return "有异常";
           break;
-        case "9":
+        case 5:
           return "已作废";
           break;
       }
     },
     //获取数据
     async getList(pageNum) {
-      // this.searchParam.page = pageNum;
-      // let res = await findByDistributorApi(this.searchParam);
-      // if (res.ErrorCode == "9999" && res.Data.Results.length > 0) {
-      //   var data = res.Data.Results;
-      //   for (var i = 0; i < data.length; i++) {
-      //     this.list.push(data[i]);
-      //   }
-      //   if (this.list.length >= res.Data.Pagination.totalCount) {
-      //     this.finished = true;
-      //   }
-      // } else {
-      this.finished = true;
-      // }
+      this.searchParam.customid = this.$store.state.employee.id;
+      this.searchParam.state = this.state;
+      this.searchParam.currentPage = pageNum;
+      let res = await findPackageCustomApi(this.searchParam);
+      if (res && res.ack == "200" && res.data.length > 0) {
+        console.log(res);
+        var data = res.data;
+        for (var i = 0; i < data.length; i++) {
+          this.list.push(data[i]);
+        }
+        if (this.list.length >= res.total) {
+          this.finished = true;
+        }
+      } else {
+        this.finished = true;
+        this.$toast.fail(res.msg);
+      }
       this.loading = false;
     },
+    goToPinyou(item) {
+      this.$router.push("/startPinyou");
+    },
+    removePinyou() {},
     onLoad() {
       this.loading = true;
       this.getList(++this.pageNum);
@@ -229,7 +253,7 @@ export default {
           });
 
         let volumeArr = ftItem.map((item) => {
-          return item.long * item.width * item.height;
+          return item.length * item.width * item.height;
         });
 
         // console.log(this.checkedResults);
@@ -276,6 +300,9 @@ export default {
       padding: 0 8px;
       font-size: 14px;
       color: #1087eb;
+    }
+    .right-botton {
+      float: right;
     }
     .order-card {
       margin-top: 10px;

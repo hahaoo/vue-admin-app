@@ -17,12 +17,17 @@ export const addPackageCustomApi = (data) =>
 export const saveGroupDetailCustomApi = (data) =>
   http.Axios.post("/saveGroupDetailCustom", data);
 
-//获取国内包裹列表接口
-export const findByDistributorApi = (data) =>
-  http.Axios.post("", {
-    api: "api.DistributorPackage.findByDistributor",
-    edatas: data,
-  });
+//获取包裹列表
+export const findPackageCustomApi = (data) =>
+  http.Axios.post("/findPackageCustom", data);
+
+//邮寄限制
+export const findContrabandApi = (data) =>
+  http.Axios.post("/findContraband", data);
+
+//客户海外地址管理
+export const findReceivePlusApi = (data) =>
+  http.Axios.post("/findReceivePlus", data);
 
 //作废国内包裹接口 即删除功能
 export const cancelByDistributorApi = (data) =>

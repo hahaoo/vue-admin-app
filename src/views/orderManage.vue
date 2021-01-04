@@ -14,19 +14,19 @@
         @change="onClickTab"
       >
         <van-tab title="已预报" :name="1">
-          <forecast-order></forecast-order>
+          <forecast-order :state="active"></forecast-order>
         </van-tab>
         <van-tab title="已上架" :name="2">
-          <on-shelf-order></on-shelf-order>
+          <on-shelf-order :state="active"></on-shelf-order>
         </van-tab>
-        <van-tab title="待打包" :name="3">
-          <order-list :status="active"></order-list>
+        <van-tab title="待打包" :name="6">
+          <order-list :state="active"></order-list>
         </van-tab>
-        <van-tab title="已出库" :name="4">
-          <order-list :status="active"></order-list>
+        <van-tab title="已出库" :name="7">
+          <order-list :state="active"></order-list>
         </van-tab>
-        <van-tab title="已发货" :name="5">
-          <order-list :status="active"></order-list>
+        <van-tab title="已发货" :name="3">
+          <order-list :state="active"></order-list>
         </van-tab>
       </van-tabs>
     </div>
@@ -36,9 +36,9 @@
 <script>
 // @ is an alias to /src
 import { NavBar, Tab, Tabs } from "vant";
-import ForecastOrder from "./components/domestic/ForecastOrder.vue";
-import OnShelfOrder from "./components/domestic/OnShelfOrder";
-import OrderList from "./components/overSeas/OrderList.vue";
+import ForecastOrder from "./components/order/ForecastOrder.vue";
+import OnShelfOrder from "./components/order/OnShelfOrder";
+import OrderList from "./components/order/OrderList.vue";
 export default {
   name: "overseas",
   components: {
@@ -56,8 +56,8 @@ export default {
   },
   created() {
     console.log(this.$route);
-    var status = this.$route.query.status;
-    this.active = status ? parseInt(status) : this.active;
+    var state = this.$route.query.state;
+    this.active = state ? parseInt(state) : this.active;
   },
   methods: {
     onClickLeft() {

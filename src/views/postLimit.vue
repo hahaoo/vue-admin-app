@@ -4,6 +4,9 @@
       <van-nav-bar title="邮寄限制" left-arrow @click-left="onClickLeft" />
     </div>
     <div class="content">
+      <div v-html="contentHtml"></div>
+    </div>
+    <!-- <div class="content">
       <p>
         1、<span class="red"> 液体</span
         >，一般的精华液、卸妆水、花露水都算是纯液体（像水一样的），会被误当作易燃性物品；（化妆品中的膏状类或稠状类物品除外），对于液体的判断就是瓶身倒立，里面的液体是否立马洒出来的都不能寄，而是滴出来的可以寄。
@@ -32,12 +35,13 @@
       <p>
         11、另外特殊不能寄的物品有自热小火锅、暖宝宝贴、磁铁、染发剂、颜料、胶水类产品一概不接，未列入品类有疑问详细单询。
       </p>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
 // @ is an alias to /src
 import { NavBar } from "vant";
+import { findContrabandApi } from "@/api/index";
 export default {
   name: "postLimit",
   components: {
@@ -45,15 +49,26 @@ export default {
   },
   data() {
     return {
-
-    }
+      contentHtml: "",
+    };
+  },
+  created() {
+    this.initData();
   },
   methods: {
     onClickLeft() {
       this.$router.go(-1);
     },
-  }
-}
+    async initData() {
+      let res = await findContrabandApi();
+      if (res && res.ack == "200") {
+        this.contentHtml = res.data.content;
+      } else {
+        this.$toast.fail(res.msg);
+      }
+    },
+  },
+};
 </script>
 <style lang="less" scoped>
 .post-limit {

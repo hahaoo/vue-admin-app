@@ -145,7 +145,7 @@ export default {
         customid: "",
         goodsType: 1,
         trackNo: "",
-        warehouseid: "",
+        warehouseid: 1,
         remark: "",
       },
     };
@@ -215,6 +215,7 @@ export default {
         customName: this.form.customName,
         customid: this.form.customid,
         warehouseid: this.form.warehouseid,
+        groupid: this.groupId,
         packageList: [
           {
             goodsType: this.form.goodsType,

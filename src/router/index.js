@@ -108,9 +108,6 @@ const routes = [
   {
     path: "/postLimit",
     name: "postLimit",
-    meta: {
-      loginRequired: false,
-    },
     component: postLimit,
   },
   {
