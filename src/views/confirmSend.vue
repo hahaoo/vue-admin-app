@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="package-info">
-        实重： {{ form.weight }} (g), 体积重： {{ form.volume }} cm3
+        实重： {{ form.weight / 1000 }} (kg), 体积重： {{ form.volume }} cm3
       </div>
       <div class="other-info">
         <van-field
@@ -87,9 +87,9 @@
 <script>
 // @ is an alias to /src
 import {
-  findByDistributorAddressApi,
+  findReceivePlusApi,
   findByDistributorShipApi,
-  transportByDistributorApi,
+  saveDeliverCustomApi,
 } from "@/api/index";
 import {
   NavBar,
@@ -113,6 +113,10 @@ export default {
   },
   data() {
     return {
+      searchParam: {
+        currentPage: 1,
+        pageSize: 100,
+      },
       addressList: [],
       addressForm: {},
       form: {
@@ -137,7 +141,7 @@ export default {
     this.form.weight = this.$route.query.weight;
     this.form.ids = data.ids;
     this.form.volumeArr = data.volumeArr;
-    // this.initData();
+    this.initData();
     console.log("11", this.form.ids);
   },
   watch: {
@@ -163,12 +167,14 @@ export default {
       if (this.$store.state.customerCurrentAddress.id) {
         this.addressForm = this.$store.state.customerCurrentAddress;
       } else {
-        let res = await findByDistributorAddressApi();
-        if (res.ErrorCode == "9999") {
-          this.addressList = res.Data.Results;
-          this.addressForm = this.addressList.filter((item) => {
-            return item.isDefault == "1";
+        let res = await findReceivePlusApi(this.searchParam);
+        if (res && res.ack == "200") {
+          this.addressList = res.data;
+          var filterItem = this.addressList.filter((item) => {
+            return item.isDefault == 1;
           })[0];
+          this.addressForm = filterItem ? filterItem : this.addressList[0];
+          // alert(JSON.stringify(this.addressForm));
         }
       }
       this.getShipList();
@@ -178,8 +184,8 @@ export default {
       let res1 = await findByDistributorShipApi({
         countryCode: this.addressForm.countryCode,
       });
-      if (res1.ErrorCode == "9999") {
-        this.logisticsList = res1.Data.Results;
+      if (res && res.ack == "200") {
+        this.logisticsList = res1.data;
       }
     },
     //根据物流渠道计算体积重
@@ -224,7 +230,7 @@ export default {
       if (sendData.addressId && sendData.shippingId) {
         console.log(sendData);
         //提交成功后清空地址信息
-        let res = await transportByDistributorApi(sendData);
+        let res = await saveDeliverCustomApi(sendData);
         if (res.ErrorCode == "9999") {
           this.$toast.success("提交成功");
           this.onClickLeft();

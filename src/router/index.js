@@ -20,6 +20,7 @@ import postLimit from "../views/postLimit.vue";
 import orderDetail from "../views/orderDetail.vue";
 import freightEstimation from "../views/freightEstimation.vue";
 import production from "../views/production.vue"; //介绍
+import logistics from "../views/logistics.vue"; //物流
 
 Vue.use(VueRouter);
 
@@ -84,25 +85,16 @@ const routes = [
   {
     path: "/addressManage",
     name: "addressManage",
-    meta: {
-      loginRequired: false,
-    },
     component: addressManage,
   },
   {
     path: "/addressDetail",
     name: "addressDetail",
-    meta: {
-      loginRequired: false,
-    },
     component: addressDetail,
   },
   {
     path: "/confirmSend",
     name: "confirmSend",
-    meta: {
-      loginRequired: false,
-    },
     component: confirmSend,
   },
   {
@@ -113,18 +105,17 @@ const routes = [
   {
     path: "/orderDetail",
     name: "orderDetail",
-    meta: {
-      loginRequired: false,
-    },
     component: orderDetail,
   },
   {
     path: "/freightEstimation",
     name: "freightEstimation",
-    meta: {
-      loginRequired: false,
-    },
     component: freightEstimation,
+  },
+  {
+    path: "/logistics",
+    name: "logistics",
+    component: logistics,
   },
 ];
 

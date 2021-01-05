@@ -171,7 +171,8 @@ export default {
     },
     //初始化获取仓库地址列表
     async initAddress() {
-      let res = await findTbWarehouseApi();
+      var sendData = { companyid: this.$store.state.employee.companyid };
+      let res = await findTbWarehouseApi(sendData);
       if (res && res.ack == 200 && res.data.length > 0) {
         this.warehouseForm = res.data[0]; //默认仓库第一个
         this.form.warehouseid = this.warehouseForm.id;
@@ -182,7 +183,8 @@ export default {
 
     //拼邮过来的时候，根据warehouseid 初始化仓库地址
     async initPinyouAddress(id) {
-      let res = await findTbWarehouseApi();
+      var sendData = { companyid: this.$store.state.employee.companyid };
+      let res = await findTbWarehouseApi(sendData);
       if (res && res.ack == 200 && res.data.length > 0) {
         this.warehouseForm = res.data.filter((item) => {
           return item.id == id;

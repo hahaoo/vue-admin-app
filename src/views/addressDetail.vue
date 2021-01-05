@@ -9,7 +9,7 @@
           label="收货人:"
           label-width="80px"
           placeholder="收货人姓名"
-          v-model="form.contact"
+          v-model="form.receiverName"
           required
           :rules="[{ required: true, message: '请填写收货人' }]"
         />
@@ -18,7 +18,7 @@
           type="digit"
           label-width="80px"
           placeholder="收货人手机号"
-          v-model="form.mobile"
+          v-model="form.receiverMobile"
           required
           :rules="[{ required: true, message: '请填写手机号' }]"
         />
@@ -26,19 +26,19 @@
           label="固定电话:"
           placeholder="固定电话"
           label-width="80px"
-          v-model="form.telephone"
+          v-model="form.receiverTel"
         />
         <van-field
           label="E-mail:"
           placeholder="收货人E-mail"
           label-width="80px"
-          v-model="form.email"
+          v-model="form.receiverEmail"
         />
         <van-field
           label="邮政编码:"
           label-width="80px"
           placeholder="邮政编码"
-          v-model="form.postCode"
+          v-model="form.receiverZipcode"
           required
           :rules="[{ required: true, message: '请填写邮政编码' }]"
         />
@@ -57,7 +57,7 @@
           label="省份/州:"
           label-width="80px"
           placeholder="请填写省份/州"
-          v-model="form.province"
+          v-model="form.receiverProvince"
           required
           :rules="[{ required: true, message: '请选择填写省份/州' }]"
         />
@@ -65,7 +65,7 @@
           label="城市:"
           label-width="80px"
           placeholder="请填写城市"
-          v-model="form.city"
+          v-model="form.receiverCity"
           required
           :rules="[{ required: true, message: '请填写城市' }]"
         />
@@ -75,8 +75,8 @@
           autosize
           type="textarea"
           label-width="80px"
-          placeholder="详细地址"
-          v-model="form.address"
+          placeholder="请填写详细地址"
+          v-model="form.receiverAddress"
           required
           :rules="[{ required: true, message: '请填写详细地址' }]"
         />
@@ -128,10 +128,9 @@
 <script>
 import {
   getCountrysApi,
-  addByDistributorAddressApi,
-  changeByDistributorAddressApi,
-  deleteByDistributorAddressApi,
-  setDefaultByDistributorApi,
+  saveReceivePlusApi,
+  updateReceivePlusApi,
+  deleteReceivePlusApi,
 } from "@/api/index";
 import { NavBar, Form, Field, Button, Popup, Switch, Picker } from "vant";
 export default {
@@ -151,18 +150,18 @@ export default {
       tempCountryName: "",
       actionFrom: "",
       countryList: [],
-      isDefault: false, //
+      isDefault: true, //
       form: {
-        contact: "",
-        mobile: "",
-        telephone: "",
-        countryCode: "",
-        province: "",
-        city: "",
-        address: "",
-        postCode: "",
-        email: "",
-        isDefault: "2", //默认2为否 1 为是
+        receiverName: "",
+        receiverMobile: "",
+        receiverTel: "",
+        receiverEmail: "",
+        receiverCountry: "", //国家
+        receiverProvince: "",
+        receiverCity: "",
+        receiverAddress: "",
+        receiverZipcode: "",
+        isDefault: 1, //默认2为否 1 为是
       },
       show: false,
     };
@@ -174,8 +173,8 @@ export default {
     if (this.actionType == "edit") {
       this.headTitle = "地址编辑";
       this.form = JSON.parse(row);
-      this.isDefault = this.form.isDefault == "1" ? true : false; //界面显示
-      this.tempCountryName = this.form.countryInfo.nameCN;
+      this.isDefault = this.form.isDefault == 1 ? true : false; //界面显示
+      // this.tempCountryName = this.form.countryInfo.nameCN;
     }
   },
 
@@ -185,8 +184,8 @@ export default {
     },
     async initData() {
       let res = await getCountrysApi();
-      if (res.ErrorCode == "9999") {
-        let arr = res.Data.Results.country;
+      if (res && res.ack == "200") {
+        let arr = res.data;
         var temparr = [];
         for (let i in arr) {
           // console.log(arr[i]);
@@ -195,7 +194,7 @@ export default {
             children: [],
           };
           for (let j in arr[i]) {
-            arr[i][j].text = arr[i][j].nameCN;
+            arr[i][j].text = arr[i][j].name;
             item.children.push(arr[i][j]);
           }
 
@@ -226,36 +225,29 @@ export default {
         return index == arr[1];
       });
       console.log(temp1, temp2);
-      this.form.countryCode = temp2[0].code2;
+      this.form.receiverCountry = temp2[0].code2;
     },
     onCancel() {
       this.show = false;
     },
-    async onSwitch() {
-      let res = await setDefaultByDistributorApi({ id: this.form.id });
-      if (res.ErrorCode == "9999" && res.Data.Results) {
-        // this.$toast.success("设置成功");
-        // this.$router.go(-1);
-      }
-    },
+
     async onDelete() {
-      let res = await deleteByDistributorAddressApi({ id: this.form.id });
-      if (res.ErrorCode == "9999" && res.Data.Results) {
+      let res = await deleteReceivePlusApi({ id: this.form.id });
+      if (res && res.ack == "200") {
         this.$toast.success("删除成功");
         this.$router.go(-1);
       }
     },
     async onSubmit() {
       console.log(this.form);
-      this.form.isDefault = this.isDefault ? "1" : "2";
-      // debugger
+      this.form.isDefault = this.isDefault ? 1 : 2;
       if (this.actionType == "edit") {
-        var res = await changeByDistributorAddressApi(this.form);
+        var res = await updateReceivePlusApi(this.form);
       } else {
-        res = await addByDistributorAddressApi(this.form);
+        res = await saveReceivePlusApi(this.form);
       }
-      if (res.ErrorCode == "9999" && res.Data.Results) {
-        console.log(res.Data.Results);
+      console.log(res);
+      if (res && res.ack == "200") {
         this.$toast.success("保存成功");
         this.$router.go(-1);
       }

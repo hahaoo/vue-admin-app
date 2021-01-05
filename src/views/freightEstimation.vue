@@ -187,7 +187,7 @@ export default {
   data() {
     return {
       headTitle: "运费估算",
-      tempCountryName: "测试",
+      tempCountryName: "",
       countryList: [],
       isDefault: false, //
       form: {

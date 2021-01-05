@@ -87,7 +87,7 @@
                 </div>
               </template>
             </van-grid-item>
-            <van-grid-item to="/orderManage?state=3">
+            <van-grid-item to="/orderManage?state=6">
               <template #text>
                 <div class="text">待打包</div>
               </template>
@@ -97,7 +97,7 @@
                 </div>
               </template>
             </van-grid-item>
-            <van-grid-item to="/orderManage?state=4">
+            <van-grid-item to="/orderManage?state=7">
               <template #text>
                 <div class="text">已出库</div>
               </template>
@@ -107,7 +107,7 @@
                 </div>
               </template>
             </van-grid-item>
-            <van-grid-item to="/orderManage?state=5">
+            <van-grid-item to="/orderManage?state=3">
               <template #text>
                 <div class="text">已发货</div>
               </template>

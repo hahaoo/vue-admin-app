@@ -1,7 +1,7 @@
 module.exports = {
   pages: {
     index: {
-      entry: ["./src/config/apiToken.js", "src/main.js"],
+      entry: ["src/main.js"],
     },
   },
   lintOnSave: false,

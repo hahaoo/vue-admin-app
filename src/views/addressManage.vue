@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import { findByDistributorAddressApi } from "@/api/index";
+import { findReceivePlusApi } from "@/api/index";
 import { NavBar, AddressList, Button } from "vant";
 export default {
   components: {
@@ -33,10 +33,14 @@ export default {
       chosenAddressId: "",
       originList: [],
       list: [],
+      searchParam: {
+        currentPage: 1,
+        pageSize: 100,
+      },
     };
   },
   created() {
-    // this.initData();
+    this.initData();
     //区分选择地址还是查看地址
     this.actionType = this.$route.query.actionType;
     this.chosenAddressId = this.$route.query.id;
@@ -52,17 +56,17 @@ export default {
       this.$router.go(-1);
     },
     async initData() {
-      let res = await findByDistributorAddressApi();
-      if (res.ErrorCode == "9999") {
-        let listData = res.Data.Results;
-        this.originList = res.Data.Results;
+      let res = await findReceivePlusApi(this.searchParam);
+      if (res && res.ack == "200") {
+        let listData = res.data;
+        this.originList = res.data;
         this.list = listData.map((item) => {
           return {
             id: item.id,
-            name: item.contact,
-            tel: item.city,
-            address: item.address + "," + item.mobile,
-            isDefault: item.isDefault == "1" ? true : false,
+            name: item.receiverName,
+            tel: item.receiverCity,
+            address: item.receiverAddress + "," + item.receiverMobile,
+            isDefault: item.isDefault == 1 ? true : false,
           };
         });
       }

@@ -25,12 +25,12 @@ Axios.interceptors.request.use(
     }
     config.headers.common["lang"] = "zh_CN";
     
-    let data = Object.assign(
-      {},
-      { companyid: store.state.employee.companyid },
-      config.data
-    );
-    config.data = JSON.stringify(data);
+    // let data = Object.assign(
+    //   {},
+    //   { companyid: store.state.employee.companyid },
+    //   config.data
+    // );
+    // config.data = JSON.stringify(data);
 
     return config;
   },

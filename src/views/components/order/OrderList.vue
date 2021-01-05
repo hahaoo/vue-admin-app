@@ -45,10 +45,14 @@
                   @click="goOrderDetail(item)"
                   >订单详情</van-button
                 >
-                <!-- <van-button round size="small" type="info" plain
+                <van-button
+                  round
+                  size="small"
+                  type="info"
+                  plain
+                  @click="goLogistics(item)"
                   >查看物流</van-button
-                >-->
-                <van-button round size="small" type="primary">签收</van-button>
+                >
               </template>
             </van-card>
           </div>
@@ -178,6 +182,14 @@ export default {
     goOrderDetail(item) {
       this.$router.push({
         path: "/orderDetail",
+        query: {
+          id: item.id,
+        },
+      });
+    },
+    goLogistics(item) {
+      this.$router.push({
+        path: "/logistics",
         query: {
           id: item.id,
         },
