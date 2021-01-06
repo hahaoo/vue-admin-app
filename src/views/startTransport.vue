@@ -143,9 +143,9 @@ export default {
       form: {
         customName: "",
         customid: "",
-        goodsType: 1,
+        goodsType: "",
         trackNo: "",
-        warehouseid: 1,
+        warehouseid: "",
         remark: "",
       },
     };
@@ -213,6 +213,10 @@ export default {
     },
     //添加拼邮包裹接口
     async saveGroupDetailCustom() {
+      let trackNos =
+        (this.form.trackNo &&
+          this.form.trackNo.split(/,|，|\s |\r | ；|;/gi)) ||
+        [];
       var sendData = {
         customName: this.form.customName,
         customid: this.form.customid,
@@ -222,7 +226,7 @@ export default {
           {
             goodsType: this.form.goodsType,
             remark: this.form.remark,
-            trackNo: this.form.trackNo,
+            trackNo: trackNos,
           },
         ],
       };
@@ -241,7 +245,20 @@ export default {
     },
     //添加新的预报订单接口
     async addPackageCustom() {
-      let res = await addPackageCustomApi(this.form);
+      console.log(this.form);
+      let trackNos =
+        (this.form.trackNo &&
+          this.form.trackNo.split(/,|，|\s |\r | ；|;/gi)) ||
+        [];
+      var sendData = {
+        customName: this.form.customName,
+        customid: this.form.customid,
+        warehouseid: this.form.warehouseid,
+        goodsType: this.form.goodsType,
+        trackNo: trackNos,
+        remark: this.form.remark,
+      };
+      let res = await addPackageCustomApi(sendData);
       if (res && res.ack == 200) {
         this.$router.push({
           path: "/orderManage",
@@ -256,11 +273,6 @@ export default {
     },
     //提交
     onSubmit(values) {
-      console.log(this.form);
-      // let trackNos =
-      //   (this.form.trackNo &&
-      //     this.form.trackNo.split(/,|，|\s |\r | ；|;/gi)) ||
-      //   [];
       if (this.groupId) {
         this.saveGroupDetailCustom();
       } else {

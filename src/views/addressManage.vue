@@ -76,7 +76,7 @@ export default {
       // this.$router.go(-1);
       // console.log(this.chosenAddressId);
     },
-    onDelete() {},
+
     onAdd() {
       this.$router.push({
         path: "/addressDetail",

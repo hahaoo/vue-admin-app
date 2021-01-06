@@ -78,5 +78,8 @@ export default {
       border-width: 0;
     }
   }
+  .van-card__desc {
+    color: #4587ec;
+  }
 }
 </style>

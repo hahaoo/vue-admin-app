@@ -9,11 +9,12 @@
           <van-cell icon="location-o" is-link @click="onEdit()">
             <template #title>
               <div class="van-address-item__name">
-                {{ addressForm.contact }} {{ addressForm.city }}
+                {{ addressForm.receiverName }} {{ addressForm.receiverCity }}
               </div>
               <div class="van-address-item__address">
-                {{ addressForm.province }}{{ addressForm.address
-                }}{{ addressForm.mobile }}
+                {{ addressForm.receiverProvince }}
+                {{ addressForm.receiverAddress }}
+                {{ addressForm.receiverMobile }}
               </div>
             </template>
           </van-cell>
@@ -113,6 +114,7 @@ export default {
   },
   data() {
     return {
+      //客户收货地址查询
       searchParam: {
         currentPage: 1,
         pageSize: 100,

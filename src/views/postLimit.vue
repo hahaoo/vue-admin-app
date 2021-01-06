@@ -4,7 +4,9 @@
       <van-nav-bar title="邮寄限制" left-arrow @click-left="onClickLeft" />
     </div>
     <div class="content">
-      <div v-html="contentHtml"></div>
+      <div v-for="(item, index) in contentList" :key="item.id">
+        <div>({{ index + 1 }}) {{ item.content }}</div>
+      </div>
     </div>
     <!-- <div class="content">
       <p>
@@ -50,6 +52,7 @@ export default {
   data() {
     return {
       contentHtml: "",
+      contentList: [],
     };
   },
   created() {
@@ -62,7 +65,7 @@ export default {
     async initData() {
       let res = await findContrabandApi();
       if (res && res.ack == "200") {
-        this.contentHtml = res.data.content;
+        this.contentList = res.data;
       } else {
         this.$toast.fail(res.msg);
       }

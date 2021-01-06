@@ -23,14 +23,17 @@
                 </template>
               </van-cell>
             </van-cell-group>
-            <van-card :title="item.logisticsName" :desc="item.remark">
+            <van-card
+              :title="item.remark"
+              :desc="item.type == 2 ? item.groupName : ''"
+            >
               <template #footer>
                 <van-button
                   round
                   size="small"
                   type="danger"
                   plain
-                  @click="onDelete(item.id)"
+                  @click="onDelete(item)"
                   >删除</van-button
                 >
               </template>
@@ -44,7 +47,7 @@
 
 <script>
 // @ is an alias to /src
-import { findPackageCustomApi } from "@/api/index";
+import { findPackageCustomApi, updatePackageApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -137,9 +140,13 @@ export default {
       this.refreshing = false;
     },
 
-    async onDelete(id) {
-      let res = await cancelByDistributorApi({ id: id });
-      if (res.ErrorCode == "9999" && res.Data.Results) {
+    async onDelete(item) {
+      let sendData = {
+        id: item.id,
+        state: item.state,
+      };
+      let res = await updatePackageApi(sendData);
+      if (res && res.ack == "200") {
         this.$toast.success("删除成功");
         this.onRefresh();
       }

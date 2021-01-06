@@ -33,11 +33,9 @@
                 </van-cell>
               </van-cell-group>
               <van-card
-                :title="item.logisticsName"
-                :desc="item.remark"
-                :price="item.type == 2 ? item.groupName : ''"
+                :title="item.remark"
+                :desc="item.type == 2 ? item.groupName : ''"
                 :thumb="item.pic ? item.pic : '3.png'"
-                currency=""
                 @click-thumb="onClickThumb(item)"
               >
               </van-card>
@@ -45,7 +43,7 @@
                 <van-cell>
                   <template #title>
                     <span class="summary-title">
-                      实重：{{ item.weight }}(g) 体积：{{ item.length }}*{{
+                      实重：{{ item.weight }}(g) 体积：{{ item.long }}*{{
                         item.width
                       }}*{{ item.height }} cm³
                     </span>
@@ -197,10 +195,7 @@ export default {
       }
       this.loading = false;
     },
-    goToPinyou(item) {
-      this.$router.push("/startPinyou");
-    },
-    removePinyou() {},
+
     onLoad() {
       this.loading = true;
       this.getList(++this.pageNum);
@@ -213,6 +208,17 @@ export default {
       this.onLoad(); // 重新加载数据
       this.refreshing = false;
     },
+    //已上架的转运单去拼邮
+    goToPinyou(item) {
+      this.$router.push({
+        path: "/startPinyou",
+        query: {
+          transportId: item.id,
+        },
+      });
+    },
+    //已上架的拼邮单，删除拼邮
+    removePinyou(item) {},
     toggle(index) {
       // console.log(this.checkedResults);
       this.$refs.checkboxes[index].toggle();
@@ -253,7 +259,7 @@ export default {
           });
 
         let volumeArr = ftItem.map((item) => {
-          return item.length * item.width * item.height;
+          return item.long * item.width * item.height;
         });
 
         // console.log(this.checkedResults);

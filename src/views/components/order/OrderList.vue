@@ -24,11 +24,11 @@
               </van-cell>
             </van-cell-group>
             <van-card
-              :title="item.logisticsName"
+              :title="item.remark"
               :num="item.num"
-              currency
+              currency=""
               :centered="true"
-              :desc="item.remark"
+              :desc="item.type == 2 ? item.groupName : ''"
               :thumb="item.pic ? item.pic : '3.png'"
               @click-thumb="onClickThumb(item)"
             >
