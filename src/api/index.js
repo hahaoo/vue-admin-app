@@ -36,8 +36,9 @@ export const deleteReceivePlusApi = (data) =>
   http.Axios.post("/deleteReceivePlus", data);
 
 //获取国家列表
-export const getCountrysApi = (data) => http.Axios.post("/findChinaCity", data);
-//根据国家查询物流渠道
+export const findCountryApi = (data) =>
+  http.Axios.post("/findCountryCode", data);
+//根据国家查询物流渠道--错误
 export const findByDistributorShipApi = (data) =>
   http.Axios.post("/findByDistributorShip", data);
 

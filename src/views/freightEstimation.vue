@@ -16,11 +16,11 @@
         <van-field
           label="目的地:"
           label-width="80px"
-          placeholder="点击选择目的地国家"
+          placeholder="点击选择国家"
           readonly
           clickable
-          @click="onChooseCountry()"
-          v-model="tempCountryName"
+          @click="onOpenCountryPop()"
+          v-model="form.countryCode"
         />
         <van-field
           readonly
@@ -78,20 +78,18 @@
       </van-form>
     </div>
 
+    <!-- 选择目的地国家 -->
     <van-popup
       v-model="show"
-      position="bottom"
-      :style="{ height: '50%' }"
+      position="right"
+      :style="{ height: '100%', width: '100%', background: '#f2f2f2' }"
       get-container="#app"
     >
-      <van-picker
-        ref="picker"
-        show-toolbar
-        title="国家"
-        :columns="countryList"
-        @confirm="onConfirm"
-        @cancel="onCancel"
-      />
+      <chooseCountryPop
+        :totalCountryData="totalCountryData"
+        @closeCountryPop="closeCountryPop"
+        @onChooseCountry="onChooseCountry"
+      ></chooseCountryPop>
     </van-popup>
     <!-- 申报类型展示 -->
     <van-popup
@@ -104,6 +102,8 @@
         @onChooseType="onChooseType"
       ></chooseProductTypePop>
     </van-popup>
+
+    <!-- 查询结果 -->
     <van-popup
       v-model="showFeeList"
       :style="{ height: '100%', width: '100%' }"
@@ -154,8 +154,9 @@
   </div>
 </template>
 <script>
+import chooseCountryPop from "./components/chooseCountryPop";
 import chooseProductTypePop from "./components/chooseProductTypePop";
-import { getCountrysApi } from "@/api/index";
+import { findCountryApi } from "@/api/index";
 import {
   NavBar,
   Form,
@@ -171,6 +172,7 @@ import {
 } from "vant";
 export default {
   components: {
+    chooseCountryPop,
     chooseProductTypePop,
     [NavBar.name]: NavBar,
     [Button.name]: Button,
@@ -188,6 +190,7 @@ export default {
     return {
       headTitle: "运费估算",
       tempCountryName: "",
+      totalCountryData: [],
       countryList: [],
       isDefault: false, //
       form: {
@@ -200,22 +203,11 @@ export default {
       showProductType: false, //默认
       show: false, //国家的选择
       showFeeList: false, // 查询结果
-      feeList: [
-        {
-          tempCountryName: "测试",
-          shippingFee: "100",
-          logistics: "测试渠道",
-        },
-        {
-          tempCountryName: "测试",
-          shippingFee: "100",
-          logistics: "测试渠道",
-        },
-      ],
+      feeList: [],
     };
   },
   created() {
-    // this.initData();
+    this.initData();
   },
 
   methods: {
@@ -223,39 +215,23 @@ export default {
       this.$router.go(-1);
     },
     async initData() {
-      let res = await getCountrysApi();
-      if (res.ErrorCode == "9999") {
-        let arr = res.Data.Results.country;
-        var temparr = [];
-        for (let i in arr) {
-          // console.log(arr[i]);
-          let item = {
-            text: i,
-            children: [],
-          };
-          for (let j in arr[i]) {
-            arr[i][j].text = arr[i][j].nameCN;
-            item.children.push(arr[i][j]);
-          }
-
-          temparr.push(item);
-        }
-        this.countryList = temparr;
+      let res = await findCountryApi();
+      if (res && res.ack == "200") {
+        this.totalCountryData = res.data;
       }
     },
-    onChooseCountry() {
+    onOpenCountryPop() {
       this.show = true;
     },
-    onConfirm(item) {
-      console.log(item);
-      var checkedValue = this.$refs.picker.getValues();
-      this.tempCountryName = item[1];
-      this.form.countryCode = checkedValue[1].code2;
+    closeCountryPop() {
       this.show = false;
     },
-    onCancel() {
+    onChooseCountry(data) {
+      console.log(data);
+      this.form.countryCode = data.nameCN;
       this.show = false;
     },
+
     async onSubmit() {
       console.log(this.form);
       this.showFeeList = true;

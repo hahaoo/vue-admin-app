@@ -96,9 +96,10 @@
         <van-button round block type="info" @click="onHandleAdd()"
           >添加包裹
         </van-button>
+
         <!-- 已预报的包裹上架了，可以直接参与拼团 -->
-        <!-- <van-button round block type="info"  @click="onDelete"
-          >立即加入
+        <!-- <van-button round block type="info" @click="onDelete">
+          立即加入
         </van-button> -->
       </div>
     </div>

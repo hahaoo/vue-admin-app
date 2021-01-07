@@ -7,7 +7,6 @@ export default new Vuex.Store({
   state: {
     token: "", //测试token
     employee: {}, //所属公司信息
-
     //客户海外地址选择
     customerCurrentAddress: {},
     isLoading: false,

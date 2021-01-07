@@ -48,8 +48,8 @@
           placeholder="点击选择国家"
           readonly
           clickable
-          @click="onChooseCountry()"
-          v-model="tempCountryName"
+          @click="onOpenCountryPop()"
+          v-model="form.receiverCountry"
           required
           :rules="[{ required: true, message: '请选择国家' }]"
         />
@@ -110,31 +110,30 @@
 
     <van-popup
       v-model="show"
-      position="bottom"
-      :style="{ height: '50%' }"
+      position="right"
+      :style="{ height: '100%', width: '100%', background: '#f2f2f2' }"
       get-container="#app"
     >
-      <van-picker
-        ref="picker"
-        show-toolbar
-        title="国家"
-        :columns="countryList"
-        @confirm="onConfirm"
-        @cancel="onCancel"
-      />
+      <chooseCountryPop
+        :totalCountryData="totalCountryData"
+        @closeCountryPop="closeCountryPop"
+        @onChooseCountry="onChooseCountry"
+      ></chooseCountryPop>
     </van-popup>
   </div>
 </template>
 <script>
 import {
-  getCountrysApi,
   saveReceivePlusApi,
   updateReceivePlusApi,
   deleteReceivePlusApi,
+  findCountryApi,
 } from "@/api/index";
 import { NavBar, Form, Field, Button, Popup, Switch, Picker } from "vant";
+import chooseCountryPop from "./components/chooseCountryPop";
 export default {
   components: {
+    chooseCountryPop,
     [NavBar.name]: NavBar,
     [Button.name]: Button,
     [Field.name]: Field,
@@ -145,6 +144,8 @@ export default {
   },
   data() {
     return {
+      totalCountryData: [],
+      countryCode: "",
       headTitle: "地址新增",
       actionType: "",
       tempCountryName: "",
@@ -169,12 +170,11 @@ export default {
   created() {
     this.actionType = this.$route.query.actionType;
     let row = this.$route.query.item;
-    // this.initData();
+    this.initData();
     if (this.actionType == "edit") {
       this.headTitle = "地址编辑";
       this.form = JSON.parse(row);
       this.isDefault = this.form.isDefault == 1 ? true : false; //界面显示
-      // this.tempCountryName = this.form.countryInfo.nameCN;
     }
   },
 
@@ -183,51 +183,20 @@ export default {
       this.$router.go(-1);
     },
     async initData() {
-      let res = await getCountrysApi();
+      let res = await findCountryApi();
       if (res && res.ack == "200") {
-        let arr = res.data;
-        var temparr = [];
-        for (let i in arr) {
-          // console.log(arr[i]);
-          let item = {
-            text: i,
-            children: [],
-          };
-          for (let j in arr[i]) {
-            arr[i][j].text = arr[i][j].name;
-            item.children.push(arr[i][j]);
-          }
-
-          temparr.push(item);
-        }
-        this.countryList = temparr;
+        this.totalCountryData = res.data;
       }
     },
-    onChooseCountry() {
-      this.actionFrom = "country";
+    onOpenCountryPop() {
       this.show = true;
     },
-    onConfirm(item, index) {
-      console.log(item, index);
-      console.log(this.countryList);
-      //版本更新之后 getValues（） 方法用不了
-      // var checkedValue = this.$refs.picker.getValues();
-      this.tempCountryName = item[1];
-      this.getCountryCode(index);
+    closeCountryPop() {
       this.show = false;
     },
-    getCountryCode(arr) {
-      console.log(arr[0], arr[1]);
-      var temp1 = this.countryList.filter((item, index) => {
-        return index == arr[0];
-      });
-      var temp2 = temp1[0].children.filter((item, index) => {
-        return index == arr[1];
-      });
-      console.log(temp1, temp2);
-      this.form.receiverCountry = temp2[0].code2;
-    },
-    onCancel() {
+    onChooseCountry(data) {
+      console.log(data);
+      this.form.receiverCountry = data.nameCN;
       this.show = false;
     },
 

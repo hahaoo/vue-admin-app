@@ -131,7 +131,18 @@ export default {
       imgUrl: "",
       images: [],
       checkedResults: [], //选中的
-      list: [],
+      list: [
+        {
+          remark: "静态数据测试",
+          trackNo: "11111",
+          type: "1",
+        },
+        {
+          remark: "静态数据测试",
+          trackNo: "222222",
+          type: "2",
+        },
+      ],
       searchParam: {
         customid: "",
         pageSize: 10,
@@ -197,8 +208,8 @@ export default {
     },
 
     onLoad() {
-      this.loading = true;
-      this.getList(++this.pageNum);
+      // this.loading = true;
+      // this.getList(++this.pageNum);
     },
     onRefresh() {
       // 清空列表数据
