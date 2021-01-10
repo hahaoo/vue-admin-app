@@ -15,20 +15,18 @@
                   <template #title>
                     <div class="title" @click="toggle(index)">
                       <van-checkbox
-                        :name="item.id"
+                        :name="item.trackNo"
                         ref="checkboxes"
                       ></van-checkbox>
-                      <span class="custom-title"
-                        >({{ parseInt(index) + 1 }}) 物流单号：{{
-                          item.trackNo
-                        }}
+                      <span class="custom-title">
+                        ({{ parseInt(index) + 1 }}) 物流单号：{{ item.trackNo }}
                       </span>
                     </div>
                   </template>
                   <template #right-icon>
-                    <van-tag type="primary" size="medium" plain>
-                      {{ formatStatus(item.state) }}
-                    </van-tag>
+                    <van-tag type="primary" size="medium" plain>{{
+                      formatStatus(item.state)
+                    }}</van-tag>
                   </template>
                 </van-cell>
               </van-cell-group>
@@ -37,8 +35,7 @@
                 :desc="item.type == 2 ? item.groupName : ''"
                 :thumb="item.pic ? item.pic : '3.png'"
                 @click-thumb="onClickThumb(item)"
-              >
-              </van-card>
+              ></van-card>
               <van-cell-group>
                 <van-cell>
                   <template #title>
@@ -49,16 +46,15 @@
                     </span>
 
                     <van-button
-                      v-if="item.type == 1"
+                      v-if="item.type == 2"
                       plain
                       round
                       size="small"
                       type="danger"
                       class="right-botton"
                       @click="removePinyou(item)"
+                      >移除拼邮</van-button
                     >
-                      移除拼邮
-                    </van-button>
                     <van-button
                       v-else
                       plain
@@ -67,9 +63,8 @@
                       type="primary"
                       class="right-botton"
                       @click="goToPinyou(item)"
+                      >拼邮</van-button
                     >
-                      拼邮
-                    </van-button>
                   </template>
                 </van-cell>
               </van-cell-group>
@@ -131,18 +126,7 @@ export default {
       imgUrl: "",
       images: [],
       checkedResults: [], //选中的
-      list: [
-        {
-          remark: "静态数据测试",
-          trackNo: "11111",
-          type: "1",
-        },
-        {
-          remark: "静态数据测试",
-          trackNo: "222222",
-          type: "2",
-        },
-      ],
+      list: [],
       searchParam: {
         customid: "",
         pageSize: 10,
@@ -208,8 +192,8 @@ export default {
     },
 
     onLoad() {
-      // this.loading = true;
-      // this.getList(++this.pageNum);
+      this.loading = true;
+      this.getList(++this.pageNum);
     },
     onRefresh() {
       // 清空列表数据
@@ -259,7 +243,7 @@ export default {
       console.log(this.checkedResults);
       if (this.checkedResults.length > 0) {
         let ftItem = this.list.filter((item) => {
-          return this.checkedResults.includes(item.id);
+          return this.checkedResults.includes(item.trackNo);
         });
         let totalWeight = ftItem
           .map((item) => {
@@ -279,7 +263,7 @@ export default {
           query: {
             weight: totalWeight,
             data: JSON.stringify({
-              ids: this.checkedResults,
+              trackNoList: this.checkedResults,
               volumeArr: volumeArr,
             }),
           },

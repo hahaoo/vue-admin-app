@@ -94,20 +94,24 @@
       </van-form>
       <div class="fixed-footer">
         <van-button round block type="info" @click="onHandleAdd()"
-          >添加包裹
-        </van-button>
+          >添加包裹</van-button
+        >
 
         <!-- 已预报的包裹上架了，可以直接参与拼团 -->
-        <!-- <van-button round block type="info" @click="onDelete">
-          立即加入
-        </van-button> -->
+        <van-button round block type="info" @click="onAddPinyou()"
+          >立即加入</van-button
+        >
       </div>
     </div>
   </div>
 </template>
 <script>
 import { NavBar, Form, Field, Button, Grid, GridItem, Icon } from "vant";
-import { findGroupOrderApi, findTbWarehouseApi } from "@/api/index";
+import {
+  findGroupOrderApi,
+  findTbWarehouseApi,
+  saveGroupDetailCustomApi,
+} from "@/api/index";
 export default {
   components: {
     [NavBar.name]: NavBar,
@@ -125,6 +129,7 @@ export default {
       groupId: "",
       actionType: "",
       warehouseAddress: "",
+      pinyouForm: {},
       form: {
         address: "",
         captain: "",
@@ -197,6 +202,33 @@ export default {
           warehouseid: this.form.warehouseid,
         },
       });
+    },
+    async onAddPinyou() {
+      var sendData = {
+        customName: this.pinyouForm.customName,
+        customid: this.pinyouForm.customid,
+        warehouseid: this.pinyouForm.warehouseid,
+        groupid: this.pinyouForm.groupId,
+        packageList: [
+          {
+            goodsType: this.pinyouForm.goodsType,
+            remark: this.pinyouForm.remark,
+            trackNo: this.pinyouForm.trackNo,
+          },
+        ],
+      };
+      let res = await saveGroupDetailCustomApi(sendData);
+      if (res && res.ack == 200) {
+        this.$router.push({
+          path: "/orderManage",
+          query: {
+            status: "1",
+          },
+        });
+        Toast.success(res.msg);
+      } else {
+        Toast.fail(res.msg);
+      }
     },
   },
 };

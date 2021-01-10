@@ -38,9 +38,9 @@ export const deleteReceivePlusApi = (data) =>
 //获取国家列表
 export const findCountryApi = (data) =>
   http.Axios.post("/findCountryCode", data);
-//根据国家查询物流渠道--错误
-export const findByDistributorShipApi = (data) =>
-  http.Axios.post("/findByDistributorShip", data);
+//根据国家查询物流渠道--
+export const findLogisticsApi = (data) =>
+  http.Axios.post("/findLogistics", data);
 
 //删除预报单
 export const updatePackageApi = (data) =>
@@ -51,3 +51,5 @@ export const saveDeliverCustomApi = (data) =>
   http.Axios.post("/saveDeliverCustom", data);
 
 //查询订单详情
+export const findDeliverOrderDetailApi = (data) =>
+  http.Axios.post("/findDeliverOrderDetail", data);

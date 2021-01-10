@@ -28,31 +28,30 @@
             block
             type="info"
             @click="onAdd"
+            >添加收货地址</van-button
           >
-            添加收货地址
-          </van-button>
         </div>
       </div>
       <div class="package-info">累计 {{ form.totalPackage }} 个包裹</div>
       <div class="logistics-info">
         <div class="title">配送方式</div>
-        <div class="box">
-          <van-radio-group v-model="form.shippingId">
+        <div class="box" v-if="logisticsList.length > 0">
+          <van-radio-group v-model="form.logisticsid">
             <van-cell-group>
               <van-cell
                 v-for="(item, index) in logisticsList"
                 :key="index"
                 clickable
-                @click="form.shippingId = item.id"
+                @click="form.logisticsid = item.id"
               >
                 <template #icon>
                   <van-radio :name="item.id" />
                 </template>
                 <template #title>
-                  <div class="">{{ item.logistics }}</div>
+                  <div class>{{ item.logisticsName }}</div>
                 </template>
                 <template #label>
-                  <div class="">{{ item.desc }}</div>
+                  <div class>{{ item.desc }}</div>
                 </template>
                 <template #right-icon>
                   <div class="right-item1">{{ item.day }}</div>
@@ -62,10 +61,12 @@
             </van-cell-group>
           </van-radio-group>
         </div>
+        <div v-else>
+          <p style="padding: 10px">无物流渠道数据</p>
+        </div>
       </div>
-      <div class="package-info">
-        实重： {{ form.weight / 1000 }} (kg), 体积重： {{ form.volume }} cm3
-      </div>
+      <!-- , 体积重： {{ form.volume }} cm3 -->
+      <div class="package-info">实重： {{ form.weight / 1000 }} (kg)</div>
       <div class="other-info">
         <van-field
           v-model="form.declareRemark"
@@ -77,9 +78,7 @@
         />
       </div>
       <div class="submit">
-        <van-button round block type="info" @click="onSubmit">
-          确定
-        </van-button>
+        <van-button round block type="info" @click="onSubmit">确定</van-button>
       </div>
     </div>
   </div>
@@ -89,7 +88,7 @@
 // @ is an alias to /src
 import {
   findReceivePlusApi,
-  findByDistributorShipApi,
+  findLogisticsApi,
   saveDeliverCustomApi,
 } from "@/api/index";
 import {
@@ -126,9 +125,9 @@ export default {
         weight: 0,
         volumeArr: [],
         volume: 0, //体积重
-        ids: [],
+        trackNoList: [],
         addressId: 0,
-        shippingId: "",
+        logisticsid: "",
         declareFee: "",
         declareRemark: "", //申报内容
       },
@@ -139,12 +138,12 @@ export default {
   created() {
     // debugger
     var data = JSON.parse(this.$route.query.data);
-    this.form.totalPackage = data.ids.length;
+    this.form.totalPackage = data.trackNoList.length;
     this.form.weight = this.$route.query.weight;
-    this.form.ids = data.ids;
+    this.form.trackNoList = data.trackNoList;
     this.form.volumeArr = data.volumeArr;
     this.initData();
-    console.log("11", this.form.ids);
+    console.log("11", this.form.trackNoList);
   },
   watch: {
     "addressForm.id": function (value) {
@@ -153,10 +152,10 @@ export default {
         this.getShipList();
       }
     },
-    "form.shippingId": function (value) {
+    "form.logisticsid": function (value) {
       if (value) {
         console.log(value);
-        this.calVolume(value);
+        // this.calVolume(value);
       }
     },
   },
@@ -183,8 +182,8 @@ export default {
     },
     //根据地址查询物流渠道
     async getShipList() {
-      let res1 = await findByDistributorShipApi({
-        countryCode: this.addressForm.countryCode,
+      let res = await findLogisticsApi({
+        countryName: this.addressForm.receiverCountry,
       });
       if (res && res.ack == "200") {
         this.logisticsList = res1.data;
@@ -223,13 +222,12 @@ export default {
     },
     async onSubmit() {
       let sendData = {
-        ids: this.form.ids,
-        shippingId: this.form.shippingId,
+        trackNoList: this.form.trackNoList,
+        logisticsid: this.form.logisticsid,
         addressId: this.addressForm.id,
-        declareFee: this.form.declareFee,
         declareRemark: this.form.declareRemark,
       };
-      if (sendData.addressId && sendData.shippingId) {
+      if (sendData.addressId && sendData.logisticsid) {
         console.log(sendData);
         //提交成功后清空地址信息
         let res = await saveDeliverCustomApi(sendData);
