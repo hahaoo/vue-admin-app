@@ -93,14 +93,24 @@
         />
       </van-form>
       <div class="fixed-footer">
-        <van-button round block type="info" @click="onHandleAdd()"
-          >添加包裹</van-button
-        >
+        <van-button
+          round
+          block
+          type="info"
+          @click="onHandleAdd()"
+          v-if="!showAddBtn"
+          >添加包裹
+        </van-button>
 
         <!-- 已预报的包裹上架了，可以直接参与拼团 -->
-        <van-button round block type="info" @click="onAddPinyou()"
-          >立即加入</van-button
-        >
+        <van-button
+          round
+          block
+          type="info"
+          @click="onAddPinyou()"
+          v-if="showAddBtn"
+          >立即加入
+        </van-button>
       </div>
     </div>
   </div>
@@ -153,7 +163,7 @@ export default {
         signWeight: 0,
         warehouseid: 0,
       },
-      show: false,
+      showAddBtn: false,
     };
   },
   created() {
@@ -161,6 +171,10 @@ export default {
     this.groupId = Number(this.$route.query.groupId);
     this.headTitle = this.$route.query.groupName;
     this.initData();
+    if (this.$route.query.pinyouData) {
+      this.pinyouForm = JSON.parse(this.$route.query.pinyouData);
+      this.showAddBtn = true;
+    }
   },
 
   methods: {
@@ -205,10 +219,10 @@ export default {
     },
     async onAddPinyou() {
       var sendData = {
-        customName: this.pinyouForm.customName,
-        customid: this.pinyouForm.customid,
-        warehouseid: this.pinyouForm.warehouseid,
-        groupid: this.pinyouForm.groupId,
+        customName: this.$store.state.employee.employeeName,
+        customid: this.$store.state.employee.id,
+        warehouseid: this.form.warehouseid,
+        groupid: this.groupId,
         packageList: [
           {
             goodsType: this.pinyouForm.goodsType,
@@ -225,9 +239,9 @@ export default {
             status: "1",
           },
         });
-        Toast.success(res.msg);
+        this.$toast.success(res.msg);
       } else {
-        Toast.fail(res.msg);
+        this.$toast.fail(res.msg);
       }
     },
   },

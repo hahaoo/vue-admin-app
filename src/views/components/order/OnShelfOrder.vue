@@ -16,6 +16,7 @@
                     <div class="title" @click="toggle(index)">
                       <van-checkbox
                         :name="item.trackNo"
+                        :disabled="item.isDisabled"
                         ref="checkboxes"
                       ></van-checkbox>
                       <span class="custom-title">
@@ -40,7 +41,7 @@
                 <van-cell>
                   <template #title>
                     <span class="summary-title">
-                      实重：{{ item.weight }}(g) 体积：{{ item.long }}*{{
+                      实重：{{ item.weight }}(g) 体积：{{ item.length }}*{{
                         item.width
                       }}*{{ item.height }} cm³
                     </span>
@@ -205,10 +206,16 @@ export default {
     },
     //已上架的转运单去拼邮
     goToPinyou(item) {
+      var pinyouData = {
+        goodsType: item.goodsType,
+        remark: item.remark,
+        trackNo: item.trackNo,
+      };
       this.$router.push({
         path: "/startPinyou",
         query: {
-          transportId: item.id,
+          actionType: "onShelfPinyou",
+          pinyouData: JSON.stringify(pinyouData),
         },
       });
     },
@@ -234,7 +241,10 @@ export default {
     },
     checkAll() {
       if (this.checked) {
-        this.$refs.checkboxGroup.toggleAll(true);
+        this.$refs.checkboxGroup.toggleAll({
+          checked: true,
+          skipDisabled: true,
+        });
       } else {
         this.$refs.checkboxGroup.toggleAll(false);
       }
@@ -254,7 +264,7 @@ export default {
           });
 
         let volumeArr = ftItem.map((item) => {
-          return item.long * item.width * item.height;
+          return item[length] * item.width * item.height;
         });
 
         // console.log(this.checkedResults);

@@ -8,7 +8,7 @@
         @load="onLoad"
       >
         <div class="pinyou-card" v-for="(item, index) in list" :key="index">
-          <van-cell-group>
+          <van-cell-group :class="item.isOverMaxWidth ? 'overWidthStype' : ''">
             <van-cell :title="item.groupName" class="card-title" />
             <van-cell class="card-progress">
               <template #title>
@@ -16,6 +16,7 @@
                   :percentage="item.rate"
                   stroke-width="10"
                   color="#1287ff"
+                  v-if="item.rate"
                 />
                 <div class="progress-tips">
                   {{ item.signWeight }} of {{ item.maxWeight }} kg
@@ -122,6 +123,13 @@ export default {
             (data[i].signWeight * 100) /
             data[i].maxWeight
           ).toFixed(2);
+
+          if (data[i].rate > 100) {
+            data[i].isOverMaxWidth = true;
+          } else {
+            data[i].isOverMaxWidth = false;
+          }
+
           this.list.push(data[i]);
         }
         if (this.list.length >= res.total) {
@@ -146,18 +154,34 @@ export default {
       this.refreshing = false;
     },
     gotoTransport(data) {
+      if (this.$route.query.actionType == "onShelfPinyou") {
+        var pinyouData = this.$route.query.pinyouData;
+      } else {
+        pinyouData = "";
+      }
       this.$router.push({
         path: "/pinyouDetail",
         query: {
           groupName: data.groupName,
           groupId: data.id,
+          pinyouData: pinyouData,
         },
       });
     },
   },
 };
 </script>
-<style lang="less" scoped>
+<style lang="less">
+.overWidthStype {
+  .van-progress__portion {
+    width: 100% !important;
+  }
+  .van-progress__pivot {
+    left: 100% !important;
+    margin-left: -50px;
+  }
+}
+
 .pinyou-list {
   .pinyou-card {
     margin: 10px;

@@ -12,46 +12,46 @@
             label-width="80px"
             placeholder="收货人姓名"
             readonly
-            v-model="addressForm.contact"
+            v-model="addressForm.customerName"
           />
           <van-field
             label="手机号码:"
             label-width="80px"
             readonly
-            v-model="addressForm.mobile"
+            v-model="addressForm.customerMobile"
           />
           <van-field
             label="E-mail:"
             placeholder="无"
             label-width="80px"
             readonly
-            v-model="addressForm.email"
+            v-model="addressForm.customerEmail"
           />
           <van-field
             label="邮政编码:"
             placeholder="无"
             label-width="80px"
             readonly
-            v-model="addressForm.province"
+            v-model="addressForm.customerZipcode"
           />
           <van-field
             label="国家:"
             placeholder="无"
             label-width="80px"
             readonly
-            v-model="addressForm.postCode"
+            v-model="addressForm.customerCountry"
           />
           <van-field
             label="省份/州:"
             label-width="80px"
             readonly
-            v-model="addressForm.province"
+            v-model="addressForm.customerProvince"
           />
           <van-field
             label="城市:"
             label-width="80px"
             readonly
-            v-model="addressForm.city"
+            v-model="addressForm.customerCity"
           />
           <van-field
             label="街道详细:"
@@ -60,29 +60,30 @@
             type="textarea"
             label-width="80px"
             readonly
-            v-model="addressForm.address"
+            v-model="addressForm.customerAddress"
           />
         </van-form>
       </div>
       <div class="package">
-        <h3>包裹详情 ({{ basicForm.packageCnt }}个)</h3>
+        <h3>包裹详情 ({{ basicForm.packageNo }}个)</h3>
         <div class="order-card" v-for="(item, index) in packages" :key="index">
           <van-cell-group>
             <van-cell>
               <template #title>
                 <div class="title">
                   <span class="custom-title"
-                    >({{ parseInt(index) + 1 }}) 国内物流单号：{{ item.id }}
+                    >({{ parseInt(index) + 1 }}) 国内物流单号：{{
+                      item.trackNo
+                    }}
                   </span>
                 </div>
               </template>
             </van-cell>
           </van-cell-group>
           <van-card
-            :title="item.packageRemark"
-            :desc="item.desc"
-            :price="item.remark"
-            :thumb="item.imgUrl ? item.imgUrl : '3.png'"
+            :title="item.remark"
+            :desc="item.type == 2 ? item.groupName : ''"
+            :thumb="item.pic ? item.pic : '3.png'"
             currency=""
           >
           </van-card>
@@ -92,7 +93,8 @@
                 <span class="summary-title">
                   <span style="display: inline-blocl; margin-right: 10px"
                     >实重：{{ item.weight }}(g)</span
-                  >体积：{{ item.long }}*{{ item.width }}*{{ item.height }} cm³
+                  >体积：{{ item[length] }}*{{ item.width }}*{{ item.height }}
+                  cm³
                 </span>
               </template>
             </van-cell>
@@ -102,14 +104,14 @@
 
       <div class="summary">
         <h3>出库重量</h3>
-        <div class="text">总重量：{{ basicForm.packageWeight }}(g)</div>
+        <div class="text">总重量：{{ basicForm.weight }}(g)</div>
       </div>
 
       <div class="fee">
         <h3>运费详情</h3>
         <div class="text">
-          <p>物流渠道：{{ basicForm.logistics }}</p>
-          <p>转运包裹单号：{{ basicForm.transTrackNumber }}</p>
+          <p>物流渠道：{{ basicForm.actualLogistics }}</p>
+          <p>转运包裹单号：{{ basicForm.deliverTrackNo }}</p>
           <p>实际运费（￥）：{{ basicForm.shippingFee }}</p>
         </div>
       </div>
@@ -119,7 +121,7 @@
 <script>
 // @ is an alias to /src
 import { NavBar, Form, Field, Cell, CellGroup, Card } from "vant";
-import { getTransportPackageDetail } from "@/api/index";
+import { findDeliverOrderDetailApi } from "@/api/index";
 export default {
   name: "postLimit",
   components: {
@@ -138,7 +140,7 @@ export default {
     };
   },
   created() {
-    // this.getDetail();
+    this.getDetail();
   },
   methods: {
     onClickLeft() {
@@ -146,11 +148,14 @@ export default {
     },
     async getDetail() {
       var id = this.$route.query.id;
-      let res = await getTransportPackageDetail({ id: id });
-      if (res && res.ErrorCode == "9999") {
-        this.addressForm = JSON.parse(res.Data.Results.address);
-        this.packages = res.Data.Results.packages;
-        this.basicForm = res.Data.Results;
+      let res = await findDeliverOrderDetailApi({
+        companyid: this.$store.state.employee.companyid,
+        id: id,
+      });
+      if (res && res.ack == 200) {
+        this.addressForm = res.data.deliverPlus;
+        this.packages = res.data.pgList;
+        this.basicForm = res.data.deliverOrder;
       }
     },
   },

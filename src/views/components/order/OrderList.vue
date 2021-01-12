@@ -45,14 +45,14 @@
                   @click="goOrderDetail(item)"
                   >订单详情</van-button
                 >
-                <van-button
+                <!-- <van-button
                   round
                   size="small"
                   type="info"
                   plain
                   @click="goLogistics(item)"
-                  >查看物流</van-button
-                >
+                  >查看物流
+                </van-button> -->
               </template>
             </van-card>
           </div>

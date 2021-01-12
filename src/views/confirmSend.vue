@@ -69,7 +69,8 @@
       <div class="package-info">实重： {{ form.weight / 1000 }} (kg)</div>
       <div class="other-info">
         <van-field
-          v-model="form.declareRemark"
+          label-width="50px"
+          v-model="form.remark"
           label="备注："
           rows="3"
           autosize
@@ -126,10 +127,9 @@ export default {
         volumeArr: [],
         volume: 0, //体积重
         trackNoList: [],
-        addressId: 0,
         logisticsid: "",
         declareFee: "",
-        declareRemark: "", //申报内容
+        remark: "", //申报内容
       },
       volumetricWeight: "", //体积重系数
       logisticsList: [],
@@ -152,12 +152,12 @@ export default {
         this.getShipList();
       }
     },
-    "form.logisticsid": function (value) {
-      if (value) {
-        console.log(value);
-        // this.calVolume(value);
-      }
-    },
+    // "form.logisticsid": function (value) {
+    //   if (value) {
+    //     console.log(value);
+    //     this.calVolume(value);
+    //   }
+    // },
   },
   methods: {
     onClickLeft() {
@@ -186,15 +186,14 @@ export default {
         countryName: this.addressForm.receiverCountry,
       });
       if (res && res.ack == "200") {
-        this.logisticsList = res1.data;
+        this.logisticsList = res.data;
       }
     },
-    //根据物流渠道计算体积重
+    //根据物流渠道计算体积重-暂时不用计算体积重
     calVolume(value) {
       let item = this.logisticsList.filter((item) => {
         return item.id == value;
       });
-      // debugger;
       let volumetricWeight = Number(item[0].volumetricWeight);
       console.log(this.form.volumeArr);
       this.form.volume = this.form.volumeArr.reduce((x, y) => {
@@ -222,16 +221,22 @@ export default {
     },
     async onSubmit() {
       let sendData = {
+        customName: this.$store.state.employee.employeeName,
+        customid: this.$store.state.employee.id,
+        customerName: this.addressForm.receiverName,
+        customerCountry: this.addressForm.receiverCountry,
+        customerCity: this.addressForm.receiverCity,
+        customerAddress: this.addressForm.receiverAddress,
+        // warehouseid: 1,
         trackNoList: this.form.trackNoList,
         logisticsid: this.form.logisticsid,
-        addressId: this.addressForm.id,
-        declareRemark: this.form.declareRemark,
+        remark: this.form.remark,
       };
-      if (sendData.addressId && sendData.logisticsid) {
+      if (sendData.customerCountry && sendData.logisticsid) {
         console.log(sendData);
         //提交成功后清空地址信息
         let res = await saveDeliverCustomApi(sendData);
-        if (res.ErrorCode == "9999") {
+        if (res && res.ack == "200") {
           this.$toast.success("提交成功");
           this.onClickLeft();
         }

@@ -7,7 +7,6 @@
 </template>
 <script>
 import { Loading } from "vant";
-// import store from "@/store/index";
 import { loginApi } from "@/api/login.js";
 export default {
   components: {
@@ -26,8 +25,8 @@ export default {
     async executeLogin() {
       let res = await loginApi();
       if (res.ack == "200") {
-        store.commit("setAuthToken", res.data.token);
-        store.commit("setEmployeeData", res.data.employee);
+        this.$store.commit("setAuthToken", res.data.token);
+        this.$store.commit("setEmployeeData", res.data.employee);
       }
     },
   },
