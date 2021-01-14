@@ -15,6 +15,8 @@
                   <span class="custom-title"
                     >({{ parseInt(index) + 1 }}) 物流单号：{{ item.trackNo }}
                   </span>
+
+                  <Copy :copyText="item.trackNo"></Copy>
                 </template>
                 <template #right-icon>
                   <van-tag type="primary" size="medium" plain>{{
@@ -47,6 +49,7 @@
 
 <script>
 // @ is an alias to /src
+import Copy from "@/components/Copy";
 import { findPackageCustomApi, updatePackageApi } from "@/api/index";
 import {
   List,
@@ -62,6 +65,7 @@ import {
 export default {
   name: "order",
   components: {
+    Copy,
     [List.name]: List,
     [PullRefresh.name]: PullRefresh,
     [Cell.name]: Cell,
@@ -143,7 +147,7 @@ export default {
     async onDelete(item) {
       let sendData = {
         id: item.id,
-        state: item.state,
+        state: 5,
       };
       let res = await updatePackageApi(sendData);
       if (res && res.ack == "200") {

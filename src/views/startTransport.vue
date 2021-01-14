@@ -215,20 +215,24 @@ export default {
     async saveGroupDetailCustom() {
       let trackNos =
         (this.form.trackNo &&
-          this.form.trackNo.split(/,|，|\s |\r | ；|;/gi)) ||
-        [];
+          this.form.trackNo.split(/,|，|\s+ |\r | ；|;/gi)) ||
+        "";
+      console.log(trackNos);
+      var plist = [];
+      for (var item of trackNos) {
+        plist.push({
+          goodsType: this.form.goodsType,
+          remark: this.form.remark,
+          trackNo: item,
+        });
+      }
+      console.log(plist);
       var sendData = {
         customName: this.form.customName,
         customid: this.form.customid,
         warehouseid: this.form.warehouseid,
         groupid: this.groupId,
-        packageList: [
-          {
-            goodsType: this.form.goodsType,
-            remark: this.form.remark,
-            trackNo: trackNos,
-          },
-        ],
+        packageList: plist,
       };
       let res = await saveGroupDetailCustomApi(sendData);
       if (res && res.ack == 200) {
@@ -248,7 +252,7 @@ export default {
       console.log(this.form);
       let trackNos =
         (this.form.trackNo &&
-          this.form.trackNo.split(/,|，|\s |\r | ；|;/gi)) ||
+          this.form.trackNo.split(/,|，|\s+ |\r | ；|;/gi)) ||
         [];
       var sendData = {
         customName: this.form.customName,

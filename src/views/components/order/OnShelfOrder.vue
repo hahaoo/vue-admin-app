@@ -13,15 +13,22 @@
               <van-cell-group>
                 <van-cell>
                   <template #title>
-                    <div class="title" @click="toggle(index)">
-                      <van-checkbox
-                        :name="item.trackNo"
-                        :disabled="item.isDisabled"
-                        ref="checkboxes"
-                      ></van-checkbox>
-                      <span class="custom-title">
-                        ({{ parseInt(index) + 1 }}) 物流单号：{{ item.trackNo }}
+                    <div class="title">
+                      <span @click="toggle(index)" style="display: flex">
+                        <van-checkbox
+                          :name="item.trackNo"
+                          :disabled="item.isDisabled"
+                          ref="checkboxes"
+                        ></van-checkbox>
+
+                        <span class="custom-title">
+                          ({{ parseInt(index) + 1 }}) 物流单号：{{
+                            item.trackNo
+                          }}
+                        </span>
                       </span>
+
+                      <Copy :copyText="item.trackNo"></Copy>
                     </div>
                   </template>
                   <template #right-icon>
@@ -88,6 +95,7 @@
 
 <script>
 // @ is an alias to /src
+import Copy from "@/components/Copy";
 import { findPackageCustomApi } from "@/api/index";
 import {
   List,
@@ -107,6 +115,7 @@ import {
 export default {
   name: "home",
   components: {
+    Copy,
     [List.name]: List,
     [PullRefresh.name]: PullRefresh,
     [Cell.name]: Cell,

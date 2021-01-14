@@ -15,6 +15,7 @@
                   <span class="custom-title"
                     >({{ index + 1 }}) 订单号：{{ item.deliverOrderid }}</span
                   >
+                  <Copy :copyText="item.deliverOrderid"></Copy>
                 </template>
                 <template #right-icon>
                   <van-tag type="primary" plain size="medium">{{
@@ -64,6 +65,7 @@
 
 <script>
 // @ is an alias to /src
+import Copy from "@/components/Copy";
 import { findPackageCustomApi } from "@/api/index";
 import {
   List,
@@ -79,6 +81,7 @@ import {
 export default {
   name: "home",
   components: {
+    Copy,
     [List.name]: List,
     [PullRefresh.name]: PullRefresh,
     [Cell.name]: Cell,

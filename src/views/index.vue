@@ -117,10 +117,7 @@ export default {
   },
   data() {
     return {
-      images: [
-        "https://img.yzcdn.cn/vant/apple-1.jpg",
-        "https://img.yzcdn.cn/vant/apple-1.jpg",
-      ],
+      images: ["./3.png", "./3.png"],
       gridList: [
         {
           name: "邮寄限制",

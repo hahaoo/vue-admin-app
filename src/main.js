@@ -12,6 +12,10 @@ Vue.prototype._ = _;
 Vue.use(Lazyload);
 Vue.use(Notify);
 Vue.use(Toast);
+
+import VueClipboard from "vue-clipboard2";
+Vue.use(VueClipboard);
+
 new Vue({
   router,
   store,
