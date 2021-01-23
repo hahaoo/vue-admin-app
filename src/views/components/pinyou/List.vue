@@ -33,8 +33,7 @@
                     </div>
                     <div class="address">
                       <van-icon name="location-o" />{{ item.country }}
-                      {{ item.province
-                      }}{{ item.city == item.province ? "" : item.city }}
+                      {{ item.province }}{{ item.city == item.province ? "" : item.city }}
                     </div>
                   </van-col>
                   <van-col span="6" class="right">
