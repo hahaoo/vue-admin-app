@@ -53,3 +53,7 @@ export const saveDeliverCustomApi = (data) =>
 //查询订单详情
 export const findDeliverOrderDetailApi = (data) =>
   http.Axios.post("/findDeliverOrderDetail", data);
+
+//查询转运单列表
+export const findDeliverOrderCustomApi = (data) =>
+  http.Axios.post("/findDeliverOrderCustom", data);

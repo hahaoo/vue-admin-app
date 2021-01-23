@@ -82,7 +82,9 @@ export default {
   },
   data() {
     return {
-      searchParam: {},
+      searchParam: {
+        state: 1,
+      },
       showTag: false,
       warehouseList: [
         {

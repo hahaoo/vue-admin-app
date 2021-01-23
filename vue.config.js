@@ -25,17 +25,10 @@ module.exports = {
         },
       },
       "/wechat": {
-        target: " http://118.24.65.152:8888", //测试环境
+        target: "http://api.wuliuy.com/", //测试环境
         changeOrigin: true, // 允许websockets跨域
         pathRewrite: {
           "^/wechat": "", //标识，接口只要是'/mock-api'开头的才用代理,最后代理路径是 http://www.baidu.com/请求路径
-        },
-      },
-      "/h5.php": {
-        target: "http://wx.wuliuy.com/h5.php", //测试环境
-        changeOrigin: true, // 允许websockets跨域
-        pathRewrite: {
-          "^/h5.php": "", //标识，接口只要是'/mock-api'开头的才用代理,最后代理路径是 http://www.baidu.com/请求路径
         },
       },
     }, // 代理转发配置，用于调试环境

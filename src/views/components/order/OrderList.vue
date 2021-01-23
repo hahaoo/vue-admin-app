@@ -13,9 +13,9 @@
               <van-cell>
                 <template #title>
                   <span class="custom-title"
-                    >({{ index + 1 }}) 订单号：{{ item.deliverOrderid }}</span
+                    >({{ index + 1 }}) 订单号：{{ item.id }}</span
                   >
-                  <Copy :copyText="item.deliverOrderid"></Copy>
+                  <Copy :copyText="item.id"></Copy>
                 </template>
                 <template #right-icon>
                   <van-tag type="primary" plain size="medium">{{
@@ -26,17 +26,17 @@
             </van-cell-group>
             <van-card
               :title="item.remark"
-              :num="item.num"
+              :num="item.packageNo"
               currency=""
               :centered="true"
-              :desc="item.type == 2 ? item.groupName : ''"
+              :desc="item.type == 2 ? '拼邮单' : '非拼邮单'"
               :thumb="item.pic ? item.pic : '3.png'"
               @click-thumb="onClickThumb(item)"
             >
               <template #footer>
                 <div class="summary-box">
-                  <span>共：{{ item.price }} 元</span>
-                  <span>共：{{ item.num }} 个包裹</span>
+                  <span>共：{{ item.shippingFee }} 元</span>
+                  <span>共：{{ item.packageNo }} 个包裹</span>
                 </div>
                 <van-button
                   round
@@ -66,7 +66,7 @@
 <script>
 // @ is an alias to /src
 import Copy from "@/components/Copy";
-import { findPackageCustomApi } from "@/api/index";
+import { findDeliverOrderCustomApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -115,25 +115,25 @@ export default {
     formatStatus(state) {
       switch (state) {
         case 1:
-          return "已申报未入库";
+          return "已申报";
           break;
         case 2:
           return "已入库";
           break;
         case 3:
-          return "已发货";
-          break;
-        case 4:
-          return "有异常";
-          break;
-        case 5:
-          return "已作废";
-          break;
-        case 6:
           return "待打包";
           break;
-        case 7:
+        case 4:
           return "已出库";
+          break;
+        case 5:
+          return "已发货";
+          break;
+        case 6:
+          return "已签收";
+          break;
+        case 100:
+          return "作废";
           break;
       }
     },
@@ -142,7 +142,7 @@ export default {
       this.searchParam.customid = this.$store.state.employee.id;
       this.searchParam.state = this.state;
       this.searchParam.currentPage = pageNum;
-      let res = await findPackageCustomApi(this.searchParam);
+      let res = await findDeliverOrderCustomApi(this.searchParam);
       if (res && res.ack == "200" && res.data.length > 0) {
         console.log(res);
         var data = res.data;

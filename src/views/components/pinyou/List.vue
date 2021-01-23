@@ -109,11 +109,18 @@ export default {
     console.log("searchKey", this.searchKey);
     this.searchParam.cityl = this.searchKey;
   },
+  watch: {
+    searchKey(value) {
+      this.list = [];
+      this.getList(1);
+    },
+  },
   methods: {
     //获取数据
     async getList(pageNum) {
       this.searchParam.currentPage = pageNum;
       this.searchParam.cityl = this.searchKey;
+      this.searchParam.state = 2;
       let res = await findGroupOrderApi(this.searchParam);
       if (res && res.ack == "200" && res.data.length > 0) {
         console.log(res);

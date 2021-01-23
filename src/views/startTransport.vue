@@ -213,10 +213,12 @@ export default {
     },
     //添加拼邮包裹接口
     async saveGroupDetailCustom() {
+      // let trackNos =
+      //   (this.form.trackNo &&
+      //     this.form.trackNo.split(/,|，|\s+ |\r | ；|;/gi)) ||
+      //   "";
       let trackNos =
-        (this.form.trackNo &&
-          this.form.trackNo.split(/,|，|\s+ |\r | ；|;/gi)) ||
-        "";
+        (this.form.trackNo && this.form.trackNo.split(/[\n,]/g)) || [];
       console.log(trackNos);
       var plist = [];
       for (var item of trackNos) {
@@ -250,10 +252,13 @@ export default {
     //添加新的预报订单接口
     async addPackageCustom() {
       console.log(this.form);
+      // let trackNos =
+      //   (this.form.trackNo &&
+      //     this.form.trackNo.split(/,|，|\s+ |\r | ；|;/gi)) ||
+      //   [];
+      // let trackNos = this.form.trackNo.split(/[\n,]/g);
       let trackNos =
-        (this.form.trackNo &&
-          this.form.trackNo.split(/,|，|\s+ |\r | ；|;/gi)) ||
-        [];
+        (this.form.trackNo && this.form.trackNo.split(/[\n,]/g)) || [];
       var sendData = {
         customName: this.form.customName,
         customid: this.form.customid,

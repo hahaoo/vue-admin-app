@@ -61,6 +61,7 @@ import {
   Tag,
   Button,
   Toast,
+  Dialog,
 } from "vant";
 export default {
   name: "order",
@@ -74,7 +75,7 @@ export default {
     [Card.name]: Card,
     [Tag.name]: Tag,
     [Button.name]: Button,
-    [Toast.name]: Toast,
+    [Dialog.name]: Dialog,
   },
   props: ["state"],
   data() {
@@ -97,16 +98,25 @@ export default {
     formatStatus(state) {
       switch (state) {
         case 1:
-          return "已申报未入库";
+          return "已申报";
           break;
         case 2:
           return "已入库";
           break;
+        case 3:
+          return "待打包";
+          break;
         case 4:
-          return "有异常";
+          return "已出库";
           break;
         case 5:
-          return "已作废";
+          return "已发货";
+          break;
+        case 6:
+          return "已签收";
+          break;
+        case 100:
+          return "作废";
           break;
       }
     },
@@ -144,16 +154,29 @@ export default {
       this.refreshing = false;
     },
 
-    async onDelete(item) {
-      let sendData = {
-        id: item.id,
-        state: 5,
-      };
-      let res = await updatePackageApi(sendData);
-      if (res && res.ack == "200") {
-        this.$toast.success("删除成功");
-        this.onRefresh();
-      }
+    onDelete(item) {
+      Dialog.confirm({
+        title: "提示",
+        message: "确认是否删除该条数据？",
+      })
+        .then(async () => {
+          // on confirm
+          let sendData = {
+            id: item.id,
+            state: 100,
+          };
+          let res = await updatePackageApi(sendData);
+          if (res && res.ack == "200") {
+            this.$toast.success("删除成功");
+            this.onRefresh();
+          } else {
+            this.$toast.fail(res.msg);
+          }
+        })
+        .catch(() => {
+          // on cancel
+          this.$toast.success("取消删除");
+        });
     },
   },
 };

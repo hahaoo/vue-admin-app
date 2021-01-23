@@ -93,7 +93,7 @@
                 <span class="summary-title">
                   <span style="display: inline-blocl; margin-right: 10px"
                     >实重：{{ item.weight }}(g)</span
-                  >体积：{{ item[length] }}*{{ item.width }}*{{ item.height }}
+                  >体积：{{ item.length }}*{{ item.width }}*{{ item.height }}
                   cm³
                 </span>
               </template>
@@ -137,6 +137,7 @@ export default {
       basicForm: {},
       addressForm: {},
       packages: [],
+      logisticsName: "",
     };
   },
   created() {

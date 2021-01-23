@@ -19,7 +19,16 @@
         <van-tab title="已上架" :name="2">
           <on-shelf-order :state="active"></on-shelf-order>
         </van-tab>
-        <van-tab title="待打包" :name="6">
+        <van-tab title="待打包" :name="3">
+          <order-list :state="active"></order-list>
+        </van-tab>
+        <van-tab title="已出库" :name="4">
+          <order-list :state="active"></order-list>
+        </van-tab>
+        <van-tab title="已发货" :name="5">
+          <order-list :state="active"></order-list>
+        </van-tab>
+        <!-- <van-tab title="待打包" :name="6">
           <order-list :state="active"></order-list>
         </van-tab>
         <van-tab title="已出库" :name="7">
@@ -27,7 +36,7 @@
         </van-tab>
         <van-tab title="已发货" :name="3">
           <order-list :state="active"></order-list>
-        </van-tab>
+        </van-tab> -->
       </van-tabs>
     </div>
   </div>
@@ -62,7 +71,9 @@ export default {
   methods: {
     onClickLeft() {
       // console.log(this.$router);
-      this.$router.go(-1);
+      this.$router.push({
+        path: "/index",
+      });
     },
     onClickTab() {},
   },

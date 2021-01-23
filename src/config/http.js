@@ -24,7 +24,7 @@ Axios.interceptors.request.use(
       config.headers.common["token"] = store.state.token;
     }
     config.headers.common["lang"] = "zh_CN";
-    
+
     // let data = Object.assign(
     //   {},
     //   { companyid: store.state.employee.companyid },
@@ -47,18 +47,14 @@ Axios.interceptors.response.use(
   res => {
     console.log("response：res", res);
     //对响应数据做些事 200 status 业务状态统一处理，其他返回业务
-    //ErrorCode 为 9999 表示请求成功
-    //1002 表示登录失效，需要重新登录
-    // switch (res.data.ErrorCode) {
-    //   case "9999":
-    //     break;
-    //   case "1002":
-    //     window.location.reload();
-    //     break;
-    //   default:
-    //     let msg = res.data.Message;
-    //     msg ? Toast.fail(msg) : Toast.fail("服务器发生错误");
-    // }
+    //ErrorCode 为 2 表示请求成功 
+    switch (res.data.ack) {
+      case "200":
+        break;
+      default:
+        let msg = res.data.msg;
+        msg ? Toast.fail(msg) : Toast.fail("服务器发生错误");
+    }
     return res.data;
   },
   error => {

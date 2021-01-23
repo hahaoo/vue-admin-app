@@ -41,7 +41,7 @@
 <script>
 // @ is an alias to /src
 import { NavBar, Step, Steps, Field, Form } from "vant";
-import { getByPackageId } from "@/api/index";
+// import { getByPackageId } from "@/api/index";
 export default {
   name: "logistics",
   components: {
@@ -65,10 +65,10 @@ export default {
       this.$router.go(-1);
     },
     async getTrackInfo(id) {
-      let res = await getByPackageId({ transportPackageId: id });
-      if (res && res.ErrorCode == "9999") {
-        this.trackInfoData = res.Data.Results;
-      }
+      // let res = await getByPackageId({ transportPackageId: id });
+      // if (res && res.ErrorCode == "9999") {
+      //   this.trackInfoData = res.Data.Results;
+      // }
       // alert(JSON.stringify(this.trackInfoData));
     },
   },

@@ -16,8 +16,9 @@
         </van-search>
       </div>
 
-      <div class="search-box" v-if="isFocus"></div>
-      <div class="search-content" v-else>
+      <!-- <div class="search-box" v-if="isFocus"> 
+      </div> -->
+      <div class="search-content">
         <PinyouList :searchKey="searchKey"></PinyouList>
       </div>
     </div>

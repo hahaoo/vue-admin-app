@@ -209,6 +209,7 @@ export default {
     },
     async onSubmit() {
       console.log(this.form);
+      // alert(JSON.stringify(this.form));
       this.form.isDefault = this.isDefault ? 1 : 2;
       if (this.actionType == "edit") {
         var res = await updateReceivePlusApi(this.form);

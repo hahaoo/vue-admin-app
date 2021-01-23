@@ -166,16 +166,25 @@ export default {
     formatStatus(state) {
       switch (state) {
         case 1:
-          return "已申报未入库";
+          return "已申报";
           break;
         case 2:
           return "已入库";
           break;
+        case 3:
+          return "待打包";
+          break;
         case 4:
-          return "有异常";
+          return "已出库";
           break;
         case 5:
-          return "已作废";
+          return "已发货";
+          break;
+        case 6:
+          return "已签收";
+          break;
+        case 100:
+          return "作废";
           break;
       }
     },
@@ -249,11 +258,11 @@ export default {
       });
     },
     checkAll() {
+      if (this.list.length <= 0) {
+        return;
+      }
       if (this.checked) {
-        this.$refs.checkboxGroup.toggleAll({
-          checked: true,
-          skipDisabled: true,
-        });
+        this.$refs.checkboxGroup.toggleAll(true);
       } else {
         this.$refs.checkboxGroup.toggleAll(false);
       }

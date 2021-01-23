@@ -83,9 +83,10 @@ export default {
         },
         {
           id: "6",
-          name: "欧美品牌",
-          imgSrc: "./icon/bandIcon.png",
+          name: "食品",
+          imgSrc: "./icon/foodIcon.png",
         },
+
         {
           id: "7",
           name: "粉末",
@@ -93,8 +94,8 @@ export default {
         },
         {
           id: "8",
-          name: "食品",
-          imgSrc: "./icon/foodIcon.png",
+          name: "欧美品牌",
+          imgSrc: "./icon/bandIcon.png",
         },
         {
           id: "9",
