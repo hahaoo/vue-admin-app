@@ -57,3 +57,11 @@ export const findDeliverOrderDetailApi = (data) =>
 //查询转运单列表
 export const findDeliverOrderCustomApi = (data) =>
   http.Axios.post("/findDeliverOrderCustom", data);
+
+//微信授权登陆
+export const wxclientloginApi = (data) =>
+  http.Axios.post("/extra/wxclientlogin", data);
+
+//移除拼邮
+export const removeGroupPackageApi = (data) =>
+  http.Axios.post("/removeGroupPackage", data);
