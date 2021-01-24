@@ -97,6 +97,7 @@
 // @ is an alias to /src
 import Copy from "@/components/Copy";
 import { findPackageCustomApi } from "@/api/index";
+import { removeGroupPackageApi } from "@/api/index";
 import {
   List,
   PullRefresh,
@@ -238,7 +239,23 @@ export default {
       });
     },
     //已上架的拼邮单，删除拼邮
-    removePinyou(item) {},
+    async removePinyou(item) {
+      let param = {
+        id: item.id,
+        deliverOrderid: item.deliverOrderid,
+        groupid: item.groupid,
+      };
+      let res = await removeGroupPackageApi(param);
+      if (res && res.ack == "200") {
+        this.list = [];
+        this.finished = false;
+        this.pageNum = 0;
+        this.refreshing = false;
+      } else {
+        this.$toast.fail(res.msg);
+      }
+      this.loading = false;
+    },
     toggle(index) {
       // console.log(this.checkedResults);
       this.$refs.checkboxes[index].toggle();
