@@ -10,6 +10,8 @@ export default new Vuex.Store({
     //客户海外地址选择
     customerCurrentAddress: {},
     isLoading: false,
+    openid: "",
+    appid: "",
   },
   mutations: {
     setAuthToken(state, payload) {
@@ -19,7 +21,12 @@ export default new Vuex.Store({
       console.log(payload);
       state.employee = payload;
     },
-
+    setOpenid(state, openid) {
+      state.openid = openid;
+    },
+    setAppid(state, appid) {
+      state.appid = appid;
+    },
     //全局loading
     updateLoadingStatus(state, isLoading) {
       state.isLoading = isLoading;
