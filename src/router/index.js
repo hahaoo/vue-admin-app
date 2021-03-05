@@ -21,21 +21,38 @@ import orderDetail from "../views/orderDetail.vue";
 import freightEstimation from "../views/freightEstimation.vue";
 import production from "../views/production.vue"; //介绍
 import logistics from "../views/logistics.vue"; //物流
+import errorPage from "../views/ErrorPage.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
+  // {
+  //   path: "/",
+  //   redirect: "/index",
+  // },
+  // {
+  //   path: "/login",
+  //   name: "login",
+  //   meta: {
+  //     loginRequired: false,
+  //   },
+  //   component: login,
+  // },
   {
     path: "/",
-    redirect: "/index",
-  },
-  {
-    path: "/login",
     name: "login",
     meta: {
       loginRequired: false,
     },
     component: login,
+  },
+  {
+    path: "/errorPage",
+    name: "errorPage",
+    meta: {
+      loginRequired: false,
+    },
+    component: errorPage,
   },
   {
     path: "/index",
@@ -141,15 +158,19 @@ router.beforeEach((to, from, next) => {
     if (store.state.token) {
       next();
     } else {
-      loginApi()
-        .then((res) => {
-          if (res.ack == "200") {
-            store.commit("setAuthToken", res.data.token);
-            store.commit("setEmployeeData", res.data.employee);
-            next();
-          }
-        })
-        .catch();
+      // loginApi()
+      //   .then((res) => {
+      //     if (res.ack == "200") {
+      //       store.commit("setAuthToken", res.data.token);
+      //       store.commit("setEmployeeData", res.data.employee);
+      //       next();
+      //     }
+      //   })
+      //   .catch();
+      next({
+        path: "/errorPage",
+        query: { msg: "没有权限", code: "901" },
+      });
     }
   } else {
     //alert("next")
