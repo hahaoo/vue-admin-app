@@ -27,6 +27,7 @@ export default {
     async executeLogin() {
       let openid = this.$route.query.openid;
       let appid = this.$route.query.appid;
+      console.log("aa");
       if (openid != null && appid != null) {
         let param = {
           openid: openid,
