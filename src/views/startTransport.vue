@@ -43,14 +43,11 @@
             <van-cell icon="location-o" is-link @click="onChangeWarehouse()">
               <template #title>
                 <div class="van-address-item__name">
-                  {{ warehouseForm.contact }}转{{ warehouseForm.creatorName }}
+                  {{ warehouseForm.contact }}转{{ $store.state.employee.employeeName }}
                   {{ warehouseForm.tel }}
                 </div>
                 <div class="van-address-item__address">
-                  {{ warehouseForm.province }}{{ warehouseForm.city
-                  }}{{ warehouseForm.district }}{{ warehouseForm.address }}({{
-                    warehouseForm.id
-                  }})
+                  {{ warehouseForm.province }}{{ warehouseForm.city}}{{ warehouseForm.district }}{{ warehouseForm.address }}
                 </div>
               </template>
             </van-cell>
