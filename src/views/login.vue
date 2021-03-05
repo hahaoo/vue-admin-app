@@ -27,7 +27,6 @@ export default {
     async executeLogin() {
       let openid = this.$route.query.openid;
       let appid = this.$route.query.appid;
-      console.log("aa");
       if (openid != null && appid != null) {
         let param = {
           openid: openid,
@@ -38,7 +37,16 @@ export default {
             if (res.ack == "200") {
               this.$store.commit("setAuthToken", res.data.token);
               this.$store.commit("setEmployeeData", res.data.employee);
-              this.$router.push({ path: "/index" });
+              if (
+                this.$route.query.redirect != "undefined" &&
+                this.$route.query.redirect != null &&
+                this.$route.query.redirect != ""
+              ) {
+                let uri = "/" + this.$route.query.redirect;
+                this.$router.push({ path: uri });
+              } else {
+                this.$router.push({ path: "/index" });
+              }
             } else {
               this.$router.push({
                 path: "/errorPage",
@@ -52,7 +60,6 @@ export default {
               query: { msg: "内部错误", code: "500" },
             });
           });
-        //alert(1);
       } else {
         loginApi()
           .then((res) => {
