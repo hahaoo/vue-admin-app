@@ -135,7 +135,7 @@
               >
                 <!-- 使用 title 插槽来自定义标题 -->
                 <template #title>
-                  <span class="custom-title">{{ item.logistics }}</span>
+                  <span class="custom-title">{{ item.logisticsName }}</span>
                 </template>
                 <template #right-icon>
                   <van-button round size="mini" type="info" @click="goToApply()"
@@ -233,8 +233,20 @@ export default {
     },
 
     async onSubmit() {
-      console.log(this.form);
-      this.showFeeList = true;
+      // console.log(this.form);
+      var sendData = {
+        countryCode:this.form.countryCode,
+        weight:1000 * Number(this.form.weight),
+        pg_length:Number(volumeArr[0]),
+        pg_width:Number(volumeArr[1]),
+        pg_height:Number(volumeArr[2])
+      };
+      let res = await calculatePriceApi(sendData);
+       if (res.ack == "200") {
+         this.feeList = res.data;
+         this.showFeeList = true;
+       }
+      
       // var volumeArr = (this.form.voloum &&
       //   this.form.voloum.split(/,|，/gi)) || [0, 0, 0];
       // var sendData = {
