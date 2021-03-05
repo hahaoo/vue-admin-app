@@ -158,7 +158,6 @@ router.beforeEach((to, from, next) => {
     if (store.state.token) {
       next();
     } else {
-      
       // loginApi()
       //   .then((res) => {
       //     if (res.ack == "200") {
