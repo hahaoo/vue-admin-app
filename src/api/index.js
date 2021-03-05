@@ -65,3 +65,7 @@ export const wxclientloginApi = (data) =>
 //移除拼邮
 export const removeGroupPackageApi = (data) =>
   http.Axios.post("/removeGroupPackage", data);
+
+//运费计算
+export const calculatePriceApi = (data) =>
+  http.Axios.post("/calculatePrice", data);
