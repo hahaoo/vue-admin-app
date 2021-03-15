@@ -171,8 +171,8 @@ export default {
       this.refreshing = false;
     },
     onClickThumb(item) {
-      if (item.imgUrl) {
-        this.images = [item.imgUrl];
+      if (item.pic) {
+        this.images = [item.pic];
       } else {
         this.images = ["3.png"];
       }

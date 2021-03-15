@@ -263,8 +263,8 @@ export default {
     },
     onClickThumb(item) {
       // console.log(item.imgUrl);
-      if (item.imgUrl) {
-        this.images = [item.imgUrl];
+      if (item.pic) {
+        this.images = [item.pic];
       } else {
         this.images = ["3.png"];
       }
