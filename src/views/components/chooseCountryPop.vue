@@ -14,8 +14,8 @@
           @blur="blur()"
         />
       </div>
-      <div class="empty-box" v-if="isFocus"></div>
-      <div v-else class="search-content">
+      <!-- <div class="empty-box" v-if="isFocus"></div> -->
+      <div class="search-content">
         <div v-if="countryList.length > 0">
           <van-radio-group v-model="checkedCountry">
             <van-cell-group>
@@ -26,12 +26,12 @@
                 clickable
                 @click="onChooseCountry(item)"
               >
-                <van-radio
+                <!-- <van-radio
                   slot="right-icon"
                   :name="item.smtCode"
                   shape="square"
                   checked-color="#29C944"
-                />
+                /> -->
               </van-cell>
             </van-cell-group>
           </van-radio-group>
